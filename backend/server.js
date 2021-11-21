@@ -10,6 +10,7 @@ app.use(bodyParser.json());
 
 require("./routes/testRoutes")(app);
 
+// este es el endpoint "/..." (donde cae todo lo que no matchee)
 app.use((req, res, next) => {
     const error = new Error("Endpoint does not exists");
     error.status = 404;
