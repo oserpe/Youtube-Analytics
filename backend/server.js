@@ -5,6 +5,7 @@ require("dotenv").config();
 const mongoDB = require("./databases/mongo");
 const politicianLoader = require("./loaders/politicianLoader");
 const channelLoader = require("./loaders/channelLoader");
+const videoLoader = require("./loaders/videoLoader");
 const app = express();
 
 // TODO: agregar winston logger
@@ -34,8 +35,9 @@ app.listen(port, () => {
 
 if (process.env.NODE_ENV == "load") {
     const loaders = () => {
-        politicianLoader();
-        channelLoader();
+        //politicianLoader();
+        //channelLoader();
+        videoLoader();
     }
     mongoDB.connect(loaders);
 } else {

@@ -18,6 +18,7 @@ function load() {
                 .catch(err => console.log(err));
             channel.uploadPlaylistId = response.items[0].contentDetails.relatedPlaylists.uploads;
             db.collection("channels").updateOne({ _id: channel._id }, { $set: channel }, { upsert: true });
+            db.collection("playlistLoadingStatus").updateOne({ _id: channel.uploadPlaylistId }, { $set: { _id: channel.uploadPlaylistId } }, { upsert: true });
         });
     });
 }

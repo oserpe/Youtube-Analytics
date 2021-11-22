@@ -1,4 +1,95 @@
 const fetch = require("node-fetch");
+const mongoDB = require("../databases/mongo");
+
+const MAX_REQUESTS_PER_PLAYLIST = 3;
+
+function parseIso8601ToMillis(duration) {
+    var reptms = /^PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?$/;
+    var hours = 0, minutes = 0, seconds = 0, totalMillis = 0;
+
+    if (reptms.test(duration)) {
+        var matches = reptms.exec(duration);
+        if (matches[1]) hours = Number(matches[1]);
+        if (matches[2]) minutes = Number(matches[2]);
+        if (matches[3]) seconds = Number(matches[3]);
+        totalMillis = (hours * 3600 + minutes * 60 + seconds) * 1000;
+    }
+    return totalMillis;
+}
+
+function uploadVideosToDB(items) {
+
+    const db = mongoDB.getDB();
+
+    items.forEach(async item => {
+        const statistics = await fetch(`${process.env.BASE_PATH}/videos?part=statistics&id=${item.snippet.resourceId.videoId}&key=${process.env.YOUTUBE_API_KEY}`)
+            .then(response => response.json())
+            .then(json => {
+                const stats = json.items[0].statistics;
+                return {
+                    likes: stats.likeCount,
+                    dislikes: stats.dislikeCount,
+                    views: stats.viewCount,
+                    commentCount: stats.commentCount
+                };
+            })
+            .catch(err => console.log(err));
+
+        const duration = await fetch(`${process.env.BASE_PATH}/videos?part=contentDetails&id=${item.snippet.resourceId.videoId}&key=${process.env.YOUTUBE_API_KEY}`)
+            .then(response => response.json())
+            .then(json => json.items[0].contentDetails.duration)
+            .catch(err => console.log(err));
+
+
+        const video = {
+            _id: item.snippet.resourceId.videoId,
+            channel_id: item.snippet.videoOwnerChannelId,
+            title: item.snippet.title,
+            description: item.snippet.description,
+            published_at: item.snippet.publishedAt,
+            duration: parseIso8601ToMillis(duration),
+            statistics
+        }
+
+        db.collection("videos").updateOne({ _id: video._id }, { $set: video }, { upsert: true });
+
+    });
+    console.log("FINISHED FETCHING VIDEOS");
+}
+
+function load() {
+
+    const db = mongoDB.getDB();
+    db.collection("playlistLoadingStatus").find().forEach(async (loadingStatus, err) => {
+        if (err) {
+            console.error("Error: " + err);
+        } else {
+            for (let i = 0; i < MAX_REQUESTS_PER_PLAYLIST; i++) {
+                const response = await fetch(`${process.env.BASE_PATH}/playlistItems?part=snippet&playlistId=${loadingStatus._id}&maxResults=50&key=${process.env.YOUTUBE_API_KEY}&pageToken=${loadingStatus.nextPageToken || ""}`)
+                    .then(response => response.json())
+                    .catch(err => console.log(err));
+
+                uploadVideosToDB(response.items);
+
+                loadingStatus.nextPageToken = response.nextPageToken;
+                if (!response.nextPageToken) {
+                    break;
+                }
+            }
+            if (loadingStatus.nextPageToken) {
+                db.collection("playlistLoadingStatus").updateOne({ _id: loadingStatus._id }, { $set: loadingStatus }, { upsert: true });
+            }
+            else {
+                console.log("Deleting playlist id: " + loadingStatus._id);
+                db.collection("playlistLoadingStatus").deleteOne({ _id: loadingStatus._id });
+            }
+
+        }
+    });
+
+}
+
+
 
 
 
@@ -14,7 +105,7 @@ function getVideo() {
 
 function getRating() {
     const playlistId = "UUN1hnUccO4FD5WfM7ithXaw";
-    const path = BASE_PATH + "/videos?key="+YOUTUBE_API_KEY+"&id=fQb_JaH2GQw&part=statistics";
+    const path = BASE_PATH + "/videos?key=" + YOUTUBE_API_KEY + "&id=fQb_JaH2GQw&part=statistics";
     console.log(path);
     fetch(path)
         .then(response => response.json())
@@ -25,16 +116,12 @@ function getRating() {
 
 function getDuration() {
     const playlistId = "UUN1hnUccO4FD5WfM7ithXaw";
-    const path = BASE_PATH + "/videos?key="+YOUTUBE_API_KEY+"&id=fQb_JaH2GQw&part=contentDetails";
+    const path = BASE_PATH + "/videos?key=" + YOUTUBE_API_KEY + "&id=fQb_JaH2GQw&part=contentDetails";
     console.log(path);
     fetch(path)
         .then(response => response.json())
         .then(json => console.log(json.items[0].contentDetails.duration))
         .catch(err => console.log(err));
-}
-
-function load() {
-    
 }
 
 function writeCSVLine(snippet, rating) {
@@ -143,4 +230,4 @@ const snippet = {
 }
 
 
-getDuration();
+module.exports = load;
