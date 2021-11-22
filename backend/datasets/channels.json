@@ -2,67 +2,67 @@
     "channels": [
         {
             "name": "C5N",
-            "id": "UCFgk2Q2mVO1BklRQhSv6p0w"
+            "_id": "UCFgk2Q2mVO1BklRQhSv6p0w"
         },
 		{
 			"name": "La Nación",
-			"id": "UCba3hpU7EFBSk817y9qZkiA"
+			"_id": "UCba3hpU7EFBSk817y9qZkiA"
 		},
 		{
 			"name": "TN",
-			"id": "UCj6PcyLvpnIRT_2W_mwa9Aw"
+			"_id": "UCj6PcyLvpnIRT_2W_mwa9Aw"
 		},
 		{
 			"name": "América",
-			"id": "UC6NVDkuzY2exMOVFw4i9oHw"
+			"_id": "UC6NVDkuzY2exMOVFw4i9oHw"
 		},
 		{
 			"name": "El Destape",
-			"id": "UC5wAqJ9NF0fpGH9dVf3h6HA"
+			"_id": "UC5wAqJ9NF0fpGH9dVf3h6HA"
 		},
 		{
 			"name": "Página12",
-			"id": "UCJNDedOnljCssaiRZqg8-Dg"
+			"_id": "UCJNDedOnljCssaiRZqg8-Dg"
 		},
 		{
 			"name": "Crónica TV",
-			"id": "UCT7KFGv6s2a-rh2Jq8ZdM1g"
+			"_id": "UCT7KFGv6s2a-rh2Jq8ZdM1g"
 		},
         {
 			"name": "Telefe Noticias",
-			"id": "UChxGASjdNEYHhVKpl667Huw"
+			"_id": "UChxGASjdNEYHhVKpl667Huw"
 		},
         {
 			"name": "Televisión Pública",
-			"id": "UCs231K71Bnu5295_x0MB5Pg"
+			"_id": "UCs231K71Bnu5295_x0MB5Pg"
 		},
         {
             "name": "Télam",
-            "id": "UCNyUm6fxPv-R5oh0fvQ63Hg"
+            "_id": "UCNyUm6fxPv-R5oh0fvQ63Hg"
         },
         {
             "name": "El Trece",
-            "id": "UC0DM_mHV2u6dj8ig51GkQwg"
+            "_id": "UC0DM_mHV2u6dj8ig51GkQwg"
         },
         {
             "name": "Clarín",
-            "id": "UCjMGMWnToRcQRqmyVB4R2xQ"
+            "_id": "UCjMGMWnToRcQRqmyVB4R2xQ"
         },
         {
             "name": "Revolución Popular Noticias",
-            "id": "UCY4SCn6o-5Oc1SRk2J-i1Gg"
+            "_id": "UCY4SCn6o-5Oc1SRk2J-i1Gg"
         },
         {
             "name": "A24",
-            "id": "UCR9120YBAqMfntqgRTKmkjQ"
+            "_id": "UCR9120YBAqMfntqgRTKmkjQ"
         },
         {
             "name": "Infobae",
-            "id": "UCvsU0EGXN7Su7MfNqcTGNHg"
+            "_id": "UCvsU0EGXN7Su7MfNqcTGNHg"
         },
         {
             "name": "Telenueve",
-            "id": "UC2Q91pxDF0BPf0eK44pgYMw"
+            "_id": "UC2Q91pxDF0BPf0eK44pgYMw"
         }
 	]
 }

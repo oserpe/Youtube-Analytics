@@ -1,7 +1,6 @@
 const fetch = require("node-fetch");
 
-const BASE_PATH = "https://youtube.googleapis.com/youtube/v3";
-const YOUTUBE_API_KEY = "AIzaSyC54bLIQkg2utR6vknEVZ8Nyz3KZlfKYis";
+
 
 function getVideo() {
     const playlistId = "UUN1hnUccO4FD5WfM7ithXaw";
