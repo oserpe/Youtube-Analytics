@@ -38,89 +38,99 @@ async function fetchWithTries(url, timeout = 500) {
 			.catch(err => { tries++; });
 	}
 
-	if (!found)
-		throw new Error("Timeout with url " + url);
+  if (!found) throw new Error("Timeout with url " + url);
 
-	return response;
+  return response;
 }
 
 function parseIso8601ToMillis(duration) {
-	var reptms = /^PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?$/;
-	var hours = 0, minutes = 0, seconds = 0, totalMillis = 0;
+  var reptms = /^PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?$/;
+  var hours = 0,
+    minutes = 0,
+    seconds = 0,
+    totalMillis = 0;
 
-	if (reptms.test(duration)) {
-		var matches = reptms.exec(duration);
-		if (matches[1]) hours = Number(matches[1]);
-		if (matches[2]) minutes = Number(matches[2]);
-		if (matches[3]) seconds = Number(matches[3]);
-		totalMillis = (hours * 3600 + minutes * 60 + seconds) * 1000;
-	}
-	return totalMillis;
+  if (reptms.test(duration)) {
+    var matches = reptms.exec(duration);
+    if (matches[1]) hours = Number(matches[1]);
+    if (matches[2]) minutes = Number(matches[2]);
+    if (matches[3]) seconds = Number(matches[3]);
+    totalMillis = (hours * 3600 + minutes * 60 + seconds) * 1000;
+  }
+  return totalMillis;
 }
 
 async function retryFetch(url) {
-	let isRequestSuccessful = false;
-	let response;
+  let isRequestSuccessful = false;
+  let response;
 
-	while (!isRequestSuccessful && youtubeApiKeyIndex < YOUTUBE_API_KEYS.length) {
-		response = await fetchWithTries(`${url}&key=${YOUTUBE_API_KEYS[youtubeApiKeyIndex]}`);
+  while (!isRequestSuccessful && youtubeApiKeyIndex < YOUTUBE_API_KEYS.length) {
+    response = await fetchWithTries(
+      `${url}&key=${YOUTUBE_API_KEYS[youtubeApiKeyIndex]}`
+    );
 
-		if (response.status != 200 && response.status != 403) {
-			throw `Error: HTTP code ${response.status} with URL ${url} and API key ${YOUTUBE_API_KEYS[youtubeApiKeyIndex]}`
-		}
+    if (response.status != 200 && response.status != 403) {
+      throw `Error: HTTP code ${response.status} with URL ${url} and API key ${YOUTUBE_API_KEYS[youtubeApiKeyIndex]}`;
+    }
 
-		isRequestSuccessful = response.status == 200;
+    isRequestSuccessful = response.status == 200;
 
-		if (!isRequestSuccessful)
-			youtubeApiKeyIndex++;
+    if (!isRequestSuccessful) youtubeApiKeyIndex++;
+  }
 
-	}
+  if (youtubeApiKeyIndex == YOUTUBE_API_KEYS.length) {
+    throw "Out of api keys";
+  }
 
-	if (youtubeApiKeyIndex == YOUTUBE_API_KEYS.length) {
-		throw "Out of api keys";
-	}
-
-	return response.json();
+  return response.json();
 }
 
 async function uploadVideosToDB(items) {
-	const db = mongoDB.getDB();
+  const db = mongoDB.getDB();
 
-	let response;
-	for (item of items) {
-		try {
-			response = await retryFetch(`${process.env.BASE_PATH}/videos?part=statistics&id=${item.snippet.resourceId.videoId}`);
-			const statisticsResponse = response.items[0].statistics;
+  let response;
+  for (item of items) {
+    try {
+      response = await retryFetch(
+        `${process.env.BASE_PATH}/videos?part=statistics&id=${item.snippet.resourceId.videoId}`
+      );
+      const statisticsResponse = response.items[0].statistics;
 
-			const statistics = {
-				likes: statisticsResponse.likeCount,
-				dislikes: statisticsResponse.dislikeCount,
-				views: statisticsResponse.viewCount,
-				commentCount: statisticsResponse.commentCount
-			};
+      const statistics = {
+        likes: statisticsResponse.likeCount,
+        dislikes: statisticsResponse.dislikeCount,
+        views: statisticsResponse.viewCount,
+        commentCount: statisticsResponse.commentCount,
+      };
 
-			response = await retryFetch(`${process.env.BASE_PATH}/videos?part=contentDetails&id=${item.snippet.resourceId.videoId}`);
-			duration = response.items[0].contentDetails.duration;
+      response = await retryFetch(
+        `${process.env.BASE_PATH}/videos?part=contentDetails&id=${item.snippet.resourceId.videoId}`
+      );
+      duration = response.items[0].contentDetails.duration;
 
-			const video = {
-				_id: item.snippet.resourceId.videoId,
-				channel_id: item.snippet.videoOwnerChannelId,
-				title: item.snippet.title,
-				description: item.snippet.description,
-				published_at: item.snippet.publishedAt,
-				duration: parseIso8601ToMillis(duration),
-				statistics
-			}
+      const video = {
+        _id: item.snippet.resourceId.videoId,
+        channel_id: item.snippet.videoOwnerChannelId,
+        title: item.snippet.title,
+        description: item.snippet.description,
+        published_at: item.snippet.publishedAt,
+        duration: parseIso8601ToMillis(duration),
+        statistics,
+      };
 
-			db.collection("videos").updateOne({ _id: video._id }, { $set: video }, { upsert: true });
-		} catch (err) {
-			console.error({
-				description: "Uploading video " + item.snippet.resourceId.videoId,
-				errorMessage: err
-			});
-			throw err;
-		}
-	}
+      db.collection("videos").updateOne(
+        { _id: video._id },
+        { $set: video },
+        { upsert: true }
+      );
+    } catch (err) {
+      console.error({
+        description: "Uploading video " + item.snippet.resourceId.videoId,
+        errorMessage: err,
+      });
+      throw err;
+    }
+  }
 }
 
 async function load() {

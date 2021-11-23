@@ -1,96 +1,94 @@
-fullname,aliases,party
-Mauricio Macri,Macri
-Cristina Fernández de Kirchner,Cristina Kirchner|Cristina Fernández|CFK
-Néstor Kirchner,Néstor
-Alberto Fernández,
-Horacio Antonio Rodríguez Larreta,Larreta
-Axel Kicillof,Kicillof
-Jose Luis Espert,Espert
-María Eugenia Vidal,Vidal
-Patricia Bullrich,Pato Bullrich
-Esteban Bullrich,
-Javier Milei,Milex
-Diego Santilli,Santilli
-Sergio Tomás Massa,Massa
-Máximo Carlos Kirchner,Máximo Kirchner
-Nicolás del Caño,Del Caño
-Victoria Tolosa Paz,Tolosa Paz
-Ricardo López Murphy,López Murphy|RLM
-Elisa María Avelina Carrió,Elisa Carrio|Lilita Carrio
-Jorge Macri,Jorge Macri
-Leandro Jorge Santoro,Santoro
-Miguel Ángel Pichetto,Pichetto
-Myriam Teresa Bregman,Bregman
-Facundo Manes,Manes
-Manuela Castañeira,Castañeira
-Fernanda Vallejos,Vallejos
-Aníbal Fernández,
-Santiago Cafiero,Cafiero
-Juan Luis Manzur,Manzur
-Graciela Ocaña,Ocaña
-Martín Tetaz,Tetaz
-Ramiro Marra,Marra
-Victoria Villarruel,Villarruel
-Cynthia Liliana Hotton,Hotton
-Juan José Gómez Centurión,Gómez Centurión
-Ofelia Fernández,Ofelia
-Roberto Lavagna,Lavagna
-Aníbal Florencio Randazzo, Randazzo
-Luis Rosales,
-Amalia Granata,Granata
-Carolina Losada,
-Luis Juez,
-Cinthia Fernández,
-Eduardo de Pedro,Wado de Pedro
-Hugo Antonio Moyano,
-Facundo Moyano,
-Pablo Moyano,
-Daniel Filmus,Filmus
-Martín Guzmán,Guzmán
-Jorge Capitanich,Capitanich
-Sabina Frederic,Frederic
-Gildo Insfrán,Insfrán
-Carlos Salomón Heller,Heller
-Daniel Gustavo Gollán,Gollán
-Carlos Saúl Menem,Carlos Saúl|Menem
-Alicia Kirchner,
-Sergio Berni,Berni
-Matías Sebastían Kulfas,Kulfas
-Ginés González García,Ginés
-Carla Vizzotti,Vizzotti
-Matías Lammens,Lammens
-Nicolás Trotta,Trotta
-Roberto Feletti,Feletti
-Gabriella Carla Cerruti,Cerruti
-Fernando Adolfo Iglesias,Fernando Iglesias
-Victoia Donda,Donda
-Mayra Mendoza,
-Gladys González,
-Fernán González Bernaldo de Quirós,Quirós
-Gabriela Michetti,Michetti
-Milagro Sala,
-Carolina Píparo,Píparo
-Jorge Taiana,Taiana
-Julio Cobos,Cobos
-Agustín Oscar Rossi,Agustín Rossi
-Amado Boudou,Boudou
-Julio Miguel de Vido,De Vido
-Oscar Parrilli,Parrilli
-Carlos Zannini,Zannini
-Daniel Osvaldo Scioli,Scioli
-Eduardo Duhalde,Duhalde
-Laura Alonso,
-Rogelio Frigerio,
-Marcos Peña,
-Alfonso Prat-Gay,Prat-Gay
-Nicolás Dujovne,Dujovne
-Luis Caputo,
-Adolfo Luis Rubinstein,Adolfo Rubinstein
-Luis Miguel Etchevehere,Etchevehere
-Guillermo Javier Dietrich,Dietrich
-Sergio Alejandro Bergman,Sergio Bergman
-Juan José Aranguren,Aranguren
-José Ignacio de Mendiguren,De Mendiguren
-Fernando de la Rúa,De la Rúa
-Domingo Cavallo,Cavallo
-Guillermo Moreno,Moreno
+fullname,party,aliases
+Mauricio Macri,Juntos por el Cambio,Macri
+Cristina Fernández de Kirchner,Frente de Todos,Cristina Kirchner|Cristina Fernández|CFK
+Néstor Kirchner,Partido Justicialista,Néstor
+Alberto Fernández,Frente de Todos,
+Horacio Antonio Rodríguez Larreta,Juntos por el Cambio,Larreta
+Axel Kicillof,Frente de Todos,Kicillof
+Jose Luis Espert,Avanza Libertad,Espert
+María Eugenia Vidal,Juntos por el Cambio,Vidal
+Patricia Bullrich,Juntos por el Cambio,Pato Bullrich
+Esteban Bullrich,Juntos por el Cambio,
+Javier Milei,La Libertad Avanza,Milei
+Diego Santilli,Juntos por el Cambio,Santilli
+Sergio Tomás Massa,Frente de Todos,Massa
+Máximo Carlos Kirchner,Frente de Todos,Máximo Kirchner
+Nicolás del Caño,Frente de Izquierda y de Trabajadores - Unidad,Del Caño
+Victoria Tolosa Paz,Frente de Todos,Tolosa Paz
+Ricardo López Murphy,Juntos por el Cambio,López Murphy|RLM
+Elisa María Avelina Carrió,Juntos por el Cambio,Elisa Carrio|Lilita Carrio
+Jorge Macri,Juntos por el Cambio,Jorge Macri
+Leandro Jorge Santoro,Frente de Todos,Santoro
+Miguel Ángel Pichetto,Juntos por el Cambio,Pichetto
+Myriam Teresa Bregman,Frente de Izquierda y de Trabajadores - Unidad,Bregman
+Facundo Manes,Juntos por el Cambio,Manes
+Manuela Castañeira,Nuevo Movimiento al Socialismo,Castañeira
+Fernanda Vallejos,Frente de Todos,Vallejos
+Aníbal Fernández,Frente de Todos,
+Santiago Cafiero,Frente de Todos,Cafiero
+Juan Luis Manzur,Frente de Todos,Manzur
+Graciela Ocaña,Juntos por el Cambio,Ocaña
+Martín Tetaz,Juntos por el Cambio,Tetaz
+Ramiro Marra,La Libertad Avanza,Marra
+Victoria Villarruel,La Libertad Avanza,Villarruel
+Cynthia Liliana Hotton,Valores Para Mi País,Hotton
+Juan José Gómez Centurión,NOS,Gómez Centurión
+Ofelia Fernández,Frente de Todos,Ofelia
+Roberto Lavagna,Consenso Federal,Lavagna
+Aníbal Florencio Randazzo,Vamos con Vos,Randazzo
+Amalia Granata,Juntos por el Cambio,Granata
+Carolina Losada,Juntos por el Cambio,
+Luis Juez,Juntos por el Cambio
+Cinthia Fernández,UNITE,
+Eduardo de Pedro,Frente de Todos,Wado de Pedro
+Hugo Antonio Moyano,,
+Facundo Moyano,Frente de Todos,
+Pablo Moyano,,
+Daniel Filmus,Frente de Todos,Filmus
+Martín Guzmán,Frente de Todos,Guzmán
+Jorge Capitanich,Frente de Todos,Capitanich
+Sabina Frederic,Frente de Todos,Frederic
+Gildo Insfrán,Frente de Todos,Insfrán
+Carlos Salomón Heller,Frente de Todos,Heller
+Daniel Gustavo Gollán,Frente de Todos,Gollán
+Carlos Saúl Menem,Frente de Todos,Carlos Saúl|Menem
+Alicia Kirchner,Frente de Todos,
+Sergio Berni,Frente de Todos,Berni
+Matías Sebastían Kulfas,Frente de Todos,Kulfas
+Ginés González García,Frente de Todos,Ginés
+Carla Vizzotti,Frente de Todos,Vizzotti
+Matías Lammens,Frente de Todos,Lammens
+Nicolás Trotta,Frente de Todos,Trotta
+Roberto Feletti,Frente de Todos,Feletti
+Gabriella Carla Cerruti,Frente de Todos,Cerruti
+Fernando Adolfo Iglesias,Juntos por el Cambio,Fernando Iglesias
+Victoia Donda,Frente de Todos,Donda
+Mayra Mendoza,Frente de Todos,
+Gladys González,Juntos por el Cambio,
+Fernán González Bernaldo de Quirós,Juntos por el Cambio,Quirós
+Gabriela Michetti,Juntos por el Cambio,Michetti
+Milagro Sala,Partido por la Soberanía Popular,
+Carolina Píparo,Avanza Libertad,Píparo
+Jorge Taiana,Frente de Todos,Taiana
+Julio Cobos,Juntos por el Cambio,Cobos
+Agustín Oscar Rossi,Frente de Todos,Agustín Rossi
+Amado Boudou,Frente de Todos,Boudou
+Julio Miguel de Vido,Frente para la Victoria,De Vido
+Oscar Parrilli,Frente de Todos,Parrilli
+Carlos Zannini,Frente de Todos,Zannini
+Daniel Osvaldo Scioli,Frente de Todos,Scioli
+Eduardo Duhalde,Consenso Federal,Duhalde
+Laura Alonso,PRO,
+Rogelio Frigerio,Juntos por el Cambio,
+Marcos Peña,Juntos por el Cambio,
+Alfonso Prat-Gay,Junto por el Cambio,Prat-Gay
+Nicolás Dujovne,Juntos por el Cambio,Dujovne
+Luis Caputo,Juntos por el Cambio,
+Adolfo Luis Rubinstein,Juntos por el Cambio,Adolfo Rubinstein
+Luis Miguel Etchevehere,Juntos por el Cambio,Etchevehere
+Guillermo Javier Dietrich,Juntos por el Cambio,Dietrich
+Sergio Alejandro Bergman,Juntos por el Cambio,Sergio Bergman
+Juan José Aranguren,Juntos por el Cambio,Aranguren
+José Ignacio de Mendiguren,Frende de Todos,De Mendiguren
+Fernando de la Rúa,Unión Cívica Radical,De la Rúa
+Guillermo Moreno,Principios y Valores,Moreno
