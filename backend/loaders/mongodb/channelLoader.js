@@ -7,7 +7,7 @@ function load() {
 
 	const db = mongoDB.getDB();
 
-	fs.readFile(path.resolve(__dirname, "..", "datasets", "channels.json"), "utf-8", (err, data) => {
+	fs.readFile(path.resolve(__dirname, "../..", "datasets", "channels.json"), "utf-8", (err, data) => {
 		if (err) {
 			console.error(err);
 			return;
@@ -21,6 +21,8 @@ function load() {
 			db.collection("playlistLoadingStatus").updateOne({ _id: channel.uploadPlaylistId }, { $set: { _id: channel.uploadPlaylistId } }, { upsert: true });
 		});
 	});
+
+	console.log("Channels loaded");
 }
 
 module.exports = load;

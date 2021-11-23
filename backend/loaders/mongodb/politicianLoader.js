@@ -14,7 +14,7 @@ function load() {
 
 	const db = mongoDB.getDB();
 
-	fs.readFile(path.resolve(__dirname, "..", "datasets", "politicians.csv"), "utf-8", (err, data) => {
+	fs.readFile(path.resolve(__dirname, "../..", "datasets", "politicians.csv"), "utf-8", (err, data) => {
 		if (err) {
 			console.error(err);
 			return;
@@ -26,6 +26,8 @@ function load() {
 			db.collection("politicians").updateOne({ fullname: politician.fullname }, { $set: politician }, { upsert: true });
 		});
 	});
+
+	console.log("politicians loaded");
 }
 
 module.exports = load;

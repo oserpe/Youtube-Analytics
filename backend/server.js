@@ -34,10 +34,10 @@ app.listen(port, () => {
 })
 
 if (process.env.NODE_ENV == "load") {
-    const loaders = () => {
-        //politicianLoader();
-        //channelLoader();
-        videoLoader();
+    const loaders = async () => {
+        // politicianLoader();
+        // channelLoader();
+        await videoLoader();
     }
     mongoDB.connect(loaders);
 } else {

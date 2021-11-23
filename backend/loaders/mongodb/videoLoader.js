@@ -8,14 +8,17 @@ const YOUTUBE_API_KEYS = [
 	"AIzaSyADq14yoBnCpe2CM7Q2dOoedrqbDHOWGmQ",
 	"AIzaSyCyMhH7cWLxHNAdc2mBDsVVZnWjJ9gKb34",
 	"AIzaSyC9dyH41I2JGEyNnjgYoDQYLXbwtIgRYxw",
-	"AIzaSyCgHC1QFeoQQzVnMqv2qK6wiebFK8BpSdc"
+	"AIzaSyCgHC1QFeoQQzVnMqv2qK6wiebFK8BpSdc",
+	"AIzaSyBq4cdAgqXGGpAgfDV0lCeKR6CNVIZGa34",
+	"AIzaSyBCtsoAmgKWw7HYdM2ukaCqS1wKe-Plliw",
+	"AIzaSyAmD5IsXdEkXCR17-UoG60dCLk-WOWDLm8"
 ];
 
 const MAX_REQUESTS_PER_PLAYLIST = 3;
 
 const MAX_FETCH_ATTEMPTS = 3;
 
-function fetchWithTimeout(url, timeout = 7000) {
+function fetchWithTimeout(url, timeout = 500) {
 	return Promise.race([
 		fetch(url),
 		new Promise(() =>
@@ -25,7 +28,7 @@ function fetchWithTimeout(url, timeout = 7000) {
 }
 
 
-async function fetchWithTries(url, timeout = 1000) {
+async function fetchWithTries(url, timeout = 500) {
 	let found = false;
 	let tries = 0;
 	let response;
@@ -120,10 +123,12 @@ async function uploadVideosToDB(items) {
 	}
 }
 
-function load() {
+async function load() {
 	const db = mongoDB.getDB();
 
-	db.collection("playlistLoadingStatus").find().toArray().then(async loadingStatusArray => {
+	let loadingStatusArray;
+	do {
+		loadingStatusArray = await db.collection("playlistLoadingStatus").find().toArray();
 		for (loadingStatus of loadingStatusArray) {
 			console.log("Fetching playlist id: " + loadingStatus._id);
 			for (let i = 0; i < MAX_REQUESTS_PER_PLAYLIST; i++) {
@@ -154,7 +159,9 @@ function load() {
 			}
 			console.log("Finished loading playlistId: " + loadingStatus._id);
 		}
-	});
+	} while (loadingStatusArray.length > 0);
+
+	console.log("Videos loaded");
 }
 
 module.exports = load;
