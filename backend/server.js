@@ -3,9 +3,9 @@ const bodyParser = require("body-parser");
 require("dotenv").config();
 
 const mongoDB = require("./databases/mongo");
-const politicianLoader = require("./loaders/politicianLoader");
-const channelLoader = require("./loaders/channelLoader");
-const videoLoader = require("./loaders/videoLoader");
+const politicianLoader = require("./loaders/mongodb/politicianLoader");
+const channelLoader = require("./loaders/mongodb/channelLoader");
+const videoLoader = require("./loaders/mongodb/videoLoader");
 const app = express();
 
 // TODO: agregar winston logger
