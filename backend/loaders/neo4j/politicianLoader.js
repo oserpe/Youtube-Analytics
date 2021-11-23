@@ -13,7 +13,7 @@ async function load() {
 					'ON CREATE SET p.aliases = $aliases, p.party = $party '+
 					'ON MATCH SET p.aliases = $aliases, p.party = $party '+
 					'RETURN p',
-					{ fullname: politician.fullname, aliases: politician.aliases, party: "politician.party" }
+					{ fullname: politician.fullname, aliases: politician.aliases, party: politician.party }
 				);
 			}
 		});
