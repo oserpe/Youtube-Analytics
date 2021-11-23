@@ -161,7 +161,7 @@ async function load() {
 		}
 	} while (loadingStatusArray.length > 0);
 
-	console.log("Videos loaded");
+	console.log("MongoDB: Videos loaded");
 }
 
 module.exports = load;

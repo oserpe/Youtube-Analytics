@@ -6,7 +6,8 @@ function parseCsvLine(line) {
 	const values = line.split(",");
 	return {
 		fullname: values[0] || "",
-		aliases: values[1] ? values[1].split("|") : []
+		aliases: values[1] ? values[1].split("|") : [],
+		party: values[2] || "",
 	};
 }
 
@@ -27,7 +28,7 @@ function load() {
 		});
 	});
 
-	console.log("politicians loaded");
+	console.log("MongoDB: Politicians loaded");
 }
 
 module.exports = load;

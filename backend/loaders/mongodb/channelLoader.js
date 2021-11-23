@@ -22,7 +22,7 @@ function load() {
 		});
 	});
 
-	console.log("Channels loaded");
+	console.log("MongoDB: Channels loaded");
 }
 
 module.exports = load;
