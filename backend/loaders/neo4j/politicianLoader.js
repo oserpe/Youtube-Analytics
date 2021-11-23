@@ -9,11 +9,10 @@ async function load() {
 		await db.collection("politicians").find().toArray().then(async politicians => {
 			for (politician of politicians) {
 				await session.run(
-					'MERGE (p:Politician {fullname: $fullname}) '+
-					'ON CREATE SET p.aliases = $aliases, p.party = $party '+
-					'ON MATCH SET p.aliases = $aliases, p.party = $party '+
-					'RETURN p',
-					{ fullname: politician.fullname, aliases: politician.aliases, party: politician.party }
+					`MERGE (p:Politician {fullname: ${politician.fullname}}) 
+					ON CREATE SET p.aliases = $aliases, p.party = ${politician.aliases} 
+					ON MATCH SET p.aliases = $aliases, p.party = ${politician.party} 
+					RETURN p`
 				);
 			}
 		});

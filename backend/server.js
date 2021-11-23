@@ -10,6 +10,10 @@ const mongoDBLoader = require("./loaders/mongodb");
 const neo4j = require("./databases/neo4j");
 const neo4jLoader = require("./loaders/neo4j");
 
+// ELASTICSEARCH
+const elasticsearch = require("./databases/elasticsearch");
+const elasticsearchLoader = require("./loaders/elasticsearch");
+
 const app = express();
 
 // TODO: agregar winston logger
@@ -39,12 +43,18 @@ app.listen(port, () => {
 
 if (process.env.NODE_ENV == "load") {
 	mongoDB.connect(mongoDBLoader).then(() => {
-		neo4j.connect(neo4jLoader);
+		elasticsearch.connect(elasticsearchLoader).then(() => {
+			neo4j.connect(neo4jLoader);
+		});
 	});
 }
 else if (process.env.NODE_ENV == "load-neo") {
 	mongoDB.connect(() => { })
 		.then(() => neo4j.connect(neo4jLoader));
+}
+else if (process.env.NODE_ENV == "load-elastic") {
+	mongoDB.connect(() => { })
+		.then(() => elasticsearch.connect(elasticsearchLoader));
 }
 else {
 	mongoDB.connect(() => { });

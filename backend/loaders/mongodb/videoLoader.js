@@ -96,12 +96,12 @@ async function uploadVideosToDB(items) {
       );
       const statisticsResponse = response.items[0].statistics;
 
-      const statistics = {
-        likes: statisticsResponse.likeCount,
-        dislikes: statisticsResponse.dislikeCount,
-        views: statisticsResponse.viewCount,
-        commentCount: statisticsResponse.commentCount,
-      };
+			const statistics = {
+				likes: statisticsResponse.likeCount,
+				dislikes: statisticsResponse.dislikeCount,
+				views: statisticsResponse.viewCount,
+				comment_count: statisticsResponse.commentCount
+			};
 
       response = await retryFetch(
         `${process.env.BASE_PATH}/videos?part=contentDetails&id=${item.snippet.resourceId.videoId}`

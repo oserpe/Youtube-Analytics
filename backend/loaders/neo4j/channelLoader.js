@@ -9,11 +9,10 @@ async function load() {
 		await db.collection("channels").find().toArray().then(async channels => {
 			for (channel of channels) {
 				await session.run(
-					'MERGE (c:Channel {channelId: $channelId}) '+
-					'ON CREATE SET c.name = $name '+
-					'ON MATCH SET c.name = $name '+
-					'RETURN c',
-					{ channelId: channel._id, name: channel.name }
+					`MERGE (c:Channel {channelId: ${channel._id}}) 
+					ON CREATE SET c.name = ${channel.name} 
+					ON MATCH SET c.name = ${channel.name}  
+					RETURN c`,
 				);
 			}
 		});
