@@ -72,16 +72,29 @@ async function retryFetch(url) {
 		);
 
 		if (response.status != 200 && response.status != 403) {
-			throw `Error: HTTP code ${response.status} with URL ${url} and API key ${YOUTUBE_API_KEYS[youtubeApiKeyIndex]}`;
+			throw new Error(
+				`Error: HTTP code ${response.status} with URL ${url} and API key ${YOUTUBE_API_KEYS[youtubeApiKeyIndex]}`
+			);
 		}
 
 		isRequestSuccessful = response.status == 200;
 
-		if (!isRequestSuccessful) youtubeApiKeyIndex++;
+		if (!isRequestSuccessful) {
+			console.log(
+				`API key n° ${youtubeApiKeyIndex} with key ${
+					YOUTUBE_API_KEYS[youtubeApiKeyIndex]
+				} reached its request limit. ${
+					youtubeApiKeyIndex + 1 == YOUTUBE_API_KEYS.length
+						? ""
+						: "Switching API key to " + YOUTUBE_API_KEYS[youtubeApiKeyIndex + 1]
+				}`
+			);
+			youtubeApiKeyIndex++;
+		}
 	}
 
 	if (youtubeApiKeyIndex == YOUTUBE_API_KEYS.length) {
-		throw "Out of api keys";
+		throw new Error("Out of api keys");
 	}
 
 	return response.json();
@@ -130,6 +143,10 @@ async function uploadVideosToDB(items) {
 				description: "Uploading video " + item.snippet.resourceId.videoId,
 				errorMessage: err,
 			});
+			if (err.message === "Out of api keys") {
+				console.log("Out of API Keys, killing server...");
+				process.exit(0);
+			}
 			throw err;
 		}
 	}
@@ -144,25 +161,37 @@ async function load() {
 			.collection("playlistLoadingStatus")
 			.find()
 			.toArray();
+
+		loadingStatusArray = loadingStatusArray.filter(
+			(loadingStatus) => !loadingStatus.is_finished
+		);
+
 		for (loadingStatus of loadingStatusArray) {
 			console.log("Fetching playlist id: " + loadingStatus._id);
+
 			for (let i = 0; i < MAX_REQUESTS_PER_PLAYLIST; i++) {
 				try {
 					console.log("\tFetching page " + loadingStatus.nextPageToken);
+
 					const response = await retryFetch(
 						`${process.env.BASE_PATH}/playlistItems?part=snippet&playlistId=${
 							loadingStatus._id
 						}&maxResults=50&pageToken=${loadingStatus.nextPageToken || ""}`
 					);
+
 					await uploadVideosToDB(response.items);
+
 					loadingStatus.nextPageToken = response.nextPageToken;
+
 					if (!response.nextPageToken) {
 						break;
 					}
 				} catch (err) {
 					if (err.message === "Out of api keys") {
-						throw err;
+						console.log("Out of API Keys, killing server...");
+						process.exit(0);
 					}
+
 					console.error({
 						description: "Loading videos",
 						errorMessage: err,
@@ -176,10 +205,14 @@ async function load() {
 					{ upsert: true }
 				);
 			} else {
-				console.log("Deleting playlist id: " + loadingStatus._id);
-				db.collection("playlistLoadingStatus").deleteOne({
-					_id: loadingStatus._id,
-				});
+				console.log("Finished loading playlist: " + loadingStatus._id);
+				loadingStatus.is_finished = true;
+
+				db.collection("playlistLoadingStatus").updateOne(
+					{ _id: loadingStatus._id },
+					{ $set: loadingStatus },
+					{ upsert: true }
+				);
 			}
 			console.log("Finished loading playlistId: " + loadingStatus._id);
 		}

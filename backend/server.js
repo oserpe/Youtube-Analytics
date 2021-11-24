@@ -42,11 +42,9 @@ app.listen(port, () => {
 });
 
 if (process.env.NODE_ENV == "load") {
-	mongoDB.connect(mongoDBLoader).then(() => {
-		elasticsearch.connect(elasticsearchLoader).then(() => {
-			neo4j.connect(neo4jLoader);
-		});
-	});
+	mongoDB.connect(mongoDBLoader);
+	// .then(() => elasticsearch.connect(elasticsearchLoader))
+	// .then(() => neo4j.connect(neo4jLoader));
 } else if (process.env.NODE_ENV == "load-neo") {
 	mongoDB
 		.connect(() => {})
