@@ -6,16 +6,24 @@ async function load() {
 
 	const db = mongoDB.getDB();
 	try {
-		await db.collection("politicians").find().toArray().then(async politicians => {
-			for (politician of politicians) {
-				await session.run(
-					`MERGE (p:Politician {fullname: ${politician.fullname}}) 
-					ON CREATE SET p.aliases = $aliases, p.party = ${politician.aliases} 
-					ON MATCH SET p.aliases = $aliases, p.party = ${politician.party} 
+		await db
+			.collection("politicians")
+			.find()
+			.toArray()
+			.then(async (politicians) => {
+				for (const politician of politicians) {
+					const aliases = politician.aliases
+						.map((alias) => `"${alias}"`)
+						.join(", ");
+
+					await session.run(
+						`MERGE (p:Politician {fullname: "${politician.fullname}"}) 
+					ON CREATE SET p.aliases = [${aliases}], p.party = "${politician.party}" 
+					ON MATCH SET p.aliases = [${aliases}], p.party = "${politician.party}"
 					RETURN p`
-				);
-			}
-		});
+					);
+				}
+			});
 	} finally {
 		await neo4j.closeSession(session);
 	}
