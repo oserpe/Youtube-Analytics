@@ -15,8 +15,7 @@ async function load() {
 					await session.run(
 						`MERGE (c:Channel {channel_id: "${channel._id}"}) 
 					ON CREATE SET c.name = "${channel.name}" 
-					ON MATCH SET c.name = "${channel.name}"  
-					RETURN c`
+					ON MATCH SET c.name = "${channel.name}"`
 					);
 				}
 			});

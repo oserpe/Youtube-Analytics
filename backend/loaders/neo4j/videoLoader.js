@@ -7,6 +7,7 @@ async function load() {
 
 	const db = mongoDB.getDB();
 	const elasticClient = elasticDB.getDB();
+
 	try {
 		const politicians = await db.collection("politicians").find().toArray();
 
@@ -16,7 +17,6 @@ async function load() {
 				.map((alias) => `(${alias})`)
 				.join(" OR ");
 
-			console.log(aliasQueryString);
 			const { body } = await elasticClient.search({
 				index: "videos",
 				body: {

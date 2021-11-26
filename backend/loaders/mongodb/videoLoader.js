@@ -128,7 +128,7 @@ async function uploadVideosToDB(items) {
 				channel_id: item.snippet.videoOwnerChannelId,
 				title: item.snippet.title,
 				description: item.snippet.description,
-				published_at: item.snippet.publishedAt,
+				published_at: new Date(item.snippet.publishedAt),
 				duration: parseIso8601ToMillis(duration),
 				statistics,
 			};

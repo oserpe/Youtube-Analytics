@@ -4,6 +4,7 @@ const elasticDB = require("../../databases/elasticsearch");
 async function load() {
 	const mongoClient = mongoDB.getDB();
 	const elasticClient = elasticDB.getDB();
+
 	try {
 		await elasticClient.indices.create({
 			index: "videos",
@@ -12,7 +13,8 @@ async function load() {
 					analysis: {
 						analyzer: {
 							my_analyzer: {
-								tokenizer: "letter",
+								type: "standard",
+								stopwords: "_spanish_",
 							},
 						},
 					},
@@ -22,11 +24,9 @@ async function load() {
 						properties: {
 							video_id: { type: "text" },
 							title: {
-								analyzer: "my_analyzer",
 								type: "text",
 							},
 							description: {
-								analyzer: "my_analyzer",
 								type: "text",
 							},
 							channel_id: { type: "text" },
@@ -43,6 +43,7 @@ async function load() {
 		console.error(err);
 	}
 
+	let count = 0;
 	const videos = await mongoClient
 		.collection("videos")
 		.find()
@@ -63,6 +64,11 @@ async function load() {
 				} catch (err) {
 					console.error(err);
 				}
+
+				if (count % Math.floor(videos.length / 100) === 0) {
+					console.log(Math.floor(count / videos.length * 100) + '% loaded');
+				}
+				count++;
 			}
 		});
 
@@ -70,7 +76,7 @@ async function load() {
 	// get any result in the consequent search
 	await elasticClient.indices.refresh({ index: "videos" });
 
-	console.log("ElasticSearch: Finished creating index");
+	console.log("ElasticSearch: Finished creating video index");
 
 	// Let's search!
 	//   const { body } = await elasticClient.search({
