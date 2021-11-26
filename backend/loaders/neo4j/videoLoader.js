@@ -5,11 +5,13 @@ const elasticDB = require("../../databases/elasticsearch");
 async function load() {
 	const session = neo4j.getSession();
 
-	const db = mongoDB.getDB();
+	const mongoClient = mongoDB.getDB();
 	const elasticClient = elasticDB.getDB();
 
 	try {
-		const politicians = await db.collection("politicians").find().toArray();
+
+		let count = 0;
+		const politicians = await mongoClient.collection("politicians").find().toArray();
 
 		for (const politician of politicians) {
 			// usamos elasticsearch para encontrar todos los videos relacionados a un politico
@@ -34,6 +36,8 @@ async function load() {
 				await session.run(`MATCH (p:Politician {fullname: "${politician.fullname}"}), (c:Channel {channel_id: "${video._source.channel_id}"})
 									MERGE (p)-[:mentioned_by {video_id: "${video._source.video_id}"}]->(c)`);
 			}
+
+			console.log(++count + " of " + politicians.length + ' politicians loaded');
 		}
 	} finally {
 		await neo4j.closeSession(session);

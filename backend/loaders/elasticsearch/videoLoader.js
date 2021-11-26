@@ -13,10 +13,20 @@ async function load() {
 					analysis: {
 						analyzer: {
 							my_analyzer: {
-								type: "standard",
-								stopwords: "_spanish_",
+								tokenizer: "standard",
+								filter: ["lowercase", "asciifolding", "default_spanish_stopwords", "default_spanish_stemmer"],
 							},
 						},
+						filter: {
+							default_spanish_stopwords: {
+								type: "stop",
+								stopwords: ["_spanish_"],
+							},
+							default_spanish_stemmer: {
+								type: "stemmer",
+								name: "spanish",
+							}
+						}
 					},
 				},
 				mappings: {
@@ -25,9 +35,11 @@ async function load() {
 							video_id: { type: "text" },
 							title: {
 								type: "text",
+								analyzer: "my_analyzer",
 							},
 							description: {
 								type: "text",
+								analyzer: "my_analyzer",
 							},
 							channel_id: { type: "text" },
 							published_at: {
