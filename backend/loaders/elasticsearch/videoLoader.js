@@ -44,7 +44,6 @@ async function load() {
 							channel_id: { type: "text" },
 							published_at: {
 								type: "date",
-								format: "YYYY-MM-DD'T'HH:mm:ssZ",
 							},
 						},
 					},
@@ -89,18 +88,6 @@ async function load() {
 	await elasticClient.indices.refresh({ index: "videos" });
 
 	console.log("ElasticSearch: Finished creating video index");
-
-	// Let's search!
-	//   const { body } = await elasticClient.search({
-	//     index: "videos",
-	//     body: {
-	//       query: {
-	//         match: { title: "CFK" },
-	//       },
-	//     },
-	//   });
-
-	//   console.log(body.hits.hits);
 }
 
 module.exports = load;
