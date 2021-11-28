@@ -5,6 +5,15 @@ async function load() {
 	const mongoClient = mongoDB.getDB();
 	const elasticClient = elasticDB.getDB();
 
+
+	try {
+		await elasticClient.indices.delete({
+			index: "videos"
+		});
+	} catch (err) {
+		// El indice no existia anteriormente, no hay que hacer nada
+	}
+
 	try {
 		await elasticClient.indices.create({
 			index: "videos",
