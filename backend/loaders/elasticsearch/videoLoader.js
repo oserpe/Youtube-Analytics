@@ -4,62 +4,99 @@ const elasticDB = require("../../databases/elasticsearch");
 async function load() {
 	const mongoClient = mongoDB.getDB();
 	const elasticClient = elasticDB.getDB();
-	try {
-		await elasticClient.indices.putMapping({
-			index: 'videos',
-			body: {
-				properties: {
-					video_id: { "type": "string" },
-					title: { "type": "string" },
-					description: { "type": "string" },
-					channel_id: { "type": "string" },
-					published_at: {
-						"type": "date",
-						"format": "EEE MMM dd HH:mm:ss Z yyyy"
-					},
-				}
-			}
 
+
+	try {
+		await elasticClient.indices.delete({
+			index: "videos"
 		});
+	} catch (err) {
+		// El indice no existia anteriormente, no hay que hacer nada
 	}
-	catch (err) {
+
+	try {
+		await elasticClient.indices.create({
+			index: "videos",
+			body: {
+				settings: {
+					analysis: {
+						analyzer: {
+							my_analyzer: {
+								tokenizer: "standard",
+								filter: ["lowercase", "asciifolding", "default_spanish_stopwords", "default_spanish_stemmer"],
+							},
+						},
+						filter: {
+							default_spanish_stopwords: {
+								type: "stop",
+								stopwords: ["_spanish_"],
+							},
+							default_spanish_stemmer: {
+								type: "stemmer",
+								name: "spanish",
+							}
+						}
+					},
+				},
+				mappings: {
+					video: {
+						properties: {
+							video_id: { type: "text" },
+							title: {
+								type: "text",
+								analyzer: "my_analyzer",
+							},
+							description: {
+								type: "text",
+								analyzer: "my_analyzer",
+							},
+							channel_id: { type: "text" },
+							published_at: {
+								type: "date",
+							},
+						},
+					},
+				},
+			},
+		});
+	} catch (err) {
 		console.error(err);
 	}
 
-	console.log("After index creation")
+	let count = 0;
+	const videos = await mongoClient
+		.collection("videos")
+		.find()
+		.toArray()
+		.then(async (videos) => {
+			for (const video of videos) {
+				try {
+					await elasticClient.index({
+						index: "videos",
+						body: {
+							video_id: video._id,
+							title: video.title,
+							description: video.description,
+							channel_id: video.channel_id,
+							published_at: video.published_at,
+						},
+					});
+				} catch (err) {
+					console.error(err);
+				}
 
-	// const videos = await mongoClient.collection("videos").find().toArray();
+				if (count % Math.floor(videos.length / 100) === 0) {
+					console.log(Math.floor(count / videos.length * 100) + '% loaded');
+				}
+				count++;
+			}
+		});
 
-	// for (video of videos) {
-	// 	console.log(video);
-	// 	await elasticClient.index({
-	// 		index: "videos",
+	// We need to force an index refresh at this point, otherwise we will not
+	// get any result in the consequent search
+	await elasticClient.indices.refresh({ index: "videos" });
 
-	// 		body: {
-	// 			"properties": {
-	// 				"video_id": video._id,
-	// 				"title": video.title,
-	// 				"description": video.description,
-	// 				"channel_id": video.channel_id,
-	// 			}
-	// 		}
-	// 	});
-	// }
-	// // We need to force an index refresh at this point, otherwise we will not
-	// // get any result in the consequent search
-	// await elasticClient.indices.refresh({ index: 'videos' })
-
-	// // Let's search!
-	// const { body } = await client.search({
-	// 	index: 'videos',
-	// 	body: {
-	// 		query: {
-	// 			match: { title: 'CFK' }
-	// 		}
-	// 	}
-	// })
-
-	// console.log(body.hits.hits)
+	console.log("ElasticSearch: Finished creating video index");
 }
 
 module.exports = load;

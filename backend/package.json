@@ -8,7 +8,7 @@
     "dev": "nodemon server.js",
     "load": "NODE_ENV=load node server.js",
     "load-neo": "NODE_ENV=load-neo node server.js",
-	"load-elastic": "NODE_ENV=load-elastic node server.js",
+    "load-elastic": "NODE_ENV=load-elastic node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

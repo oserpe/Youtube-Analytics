@@ -24,9 +24,9 @@ require("./routes/testRoutes")(app);
 
 // este es el endpoint "/..." (donde cae todo lo que no matchee)
 app.use((req, res, next) => {
-  const error = new Error("Endpoint does not exists");
-  error.status = 404;
-  next(error);
+	const error = new Error("Endpoint does not exists");
+	error.status = 404;
+	next(error);
 });
 
 app.use((error, req, res, next) => {
@@ -38,29 +38,27 @@ app.use((error, req, res, next) => {
 const port = process.env.PORT || 5000;
 
 app.listen(port, () => {
-  console.log(`SERVER LISTENING ON PORT ${port}`);
+	console.log(`SERVER LISTENING ON PORT ${port}`);
 });
 
 if (process.env.NODE_ENV == "load") {
-	mongoDB.connect(mongoDBLoader).then(() => {
-		elasticsearch.connect(elasticsearchLoader).then(() => {
-			neo4j.connect(neo4jLoader);
-		});
-	});
-}
-else if (process.env.NODE_ENV == "load-neo") {
-	mongoDB.connect(() => { })
+	mongoDB.connect(mongoDBLoader);
+	// .then(() => elasticsearch.connect(elasticsearchLoader))
+	// .then(() => neo4j.connect(neo4jLoader));
+} else if (process.env.NODE_ENV == "load-neo") {
+	mongoDB
+		.connect(() => {})
+		.then(() => elasticsearch.connect(() => {}))
 		.then(() => neo4j.connect(neo4jLoader));
-}
-else if (process.env.NODE_ENV == "load-elastic") {
-	mongoDB.connect(() => { })
+} else if (process.env.NODE_ENV == "load-elastic") {
+	mongoDB
+		.connect(() => {})
 		.then(() => elasticsearch.connect(elasticsearchLoader));
-}
-else {
-	mongoDB.connect(() => { });
+} else {
+	mongoDB.connect(() => {});
 }
 
 process.on("SIGINT", function () {
-  // some other closing procedures go here
-  process.exit(0);
+	// some other closing procedures go here
+	process.exit(0);
 });
