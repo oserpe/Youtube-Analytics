@@ -41,22 +41,25 @@ app.listen(port, () => {
 	console.log(`SERVER LISTENING ON PORT ${port}`);
 });
 
-if (process.env.NODE_ENV == "load") {
-	mongoDB.connect(mongoDBLoader);
-	// .then(() => elasticsearch.connect(elasticsearchLoader))
-	// .then(() => neo4j.connect(neo4jLoader));
-} else if (process.env.NODE_ENV == "load-neo") {
-	mongoDB
-		.connect(() => {})
-		.then(() => elasticsearch.connect(() => {}))
-		.then(() => neo4j.connect(neo4jLoader));
-} else if (process.env.NODE_ENV == "load-elastic") {
-	mongoDB
-		.connect(() => {})
-		.then(() => elasticsearch.connect(elasticsearchLoader));
-} else {
-	mongoDB.connect(() => {});
-}
+
+// FIXME: CONNECT TO ALL DATABASES WITHOUT LOADERS!
+
+// if (process.env.NODE_ENV == "load") {
+// 	mongoDB.connect(mongoDBLoader);
+// 	// .then(() => elasticsearch.connect(elasticsearchLoader))
+// 	// .then(() => neo4j.connect(neo4jLoader));
+// } else if (process.env.NODE_ENV == "load-neo") {
+// 	mongoDB
+// 		.connect(() => {})
+// 		.then(() => elasticsearch.connect(() => {}))
+// 		.then(() => neo4j.connect(neo4jLoader));
+// } else if (process.env.NODE_ENV == "load-elastic") {
+// 	mongoDB
+// 		.connect(() => {})
+// 		.then(() => elasticsearch.connect(elasticsearchLoader));
+// } else {
+// 	mongoDB.connect(() => {});
+// }
 
 process.on("SIGINT", function () {
 	// some other closing procedures go here
