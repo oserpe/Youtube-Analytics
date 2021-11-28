@@ -6,9 +6,10 @@
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js",
-    "load": "NODE_ENV=load node server.js",
-    "load-neo": "NODE_ENV=load-neo node server.js",
-    "load-elastic": "NODE_ENV=load-elastic node server.js",
+    "load-mongo": "NODE_ENV=mongodb node loaders/load.js",
+    "load-neo": "NODE_ENV=neo4j node loaders/load.js",
+    "load-elastic": "NODE_ENV=elasticsearch node loaders/load.js",
+    "load-all": "NODE_ENV=all node loaders/load.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

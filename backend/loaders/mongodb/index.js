@@ -3,7 +3,7 @@ const mongodbChannelLoader = require("./channelLoader");
 const mongodbVideoLoader = require("./videoLoader");
 
 module.exports = async () => {
-	mongodbPoliticianLoader();
-	mongodbChannelLoader();
+	await mongodbPoliticianLoader();
+	await mongodbChannelLoader();
 	await mongodbVideoLoader();
 }

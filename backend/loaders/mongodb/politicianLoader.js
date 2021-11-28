@@ -1,6 +1,7 @@
 const mongoDB = require("../../databases/mongo");
 const fs = require("fs");
 const path = require("path");
+const fsPromises = fs.promises;
 
 function parseCsvLine(line) {
   const values = line.split(",");
@@ -11,29 +12,24 @@ function parseCsvLine(line) {
   };
 }
 
-function load() {
+async function load() {
   const db = mongoDB.getDB();
 
-  fs.readFile(
-    path.resolve(__dirname, "../..", "datasets", "politicians.csv"),
-    "utf-8",
-    (err, data) => {
-      if (err) {
-        console.error(err);
-        return;
-      }
+  await fsPromises.readFile(path.resolve(__dirname, "../..", "datasets", "politicians.csv"))
+    .then(async data => {   
+      data = data.toString();
       // removing header
       const lines = data.split("\n").slice(1);
-      lines.forEach((line) => {
+      for (const line of lines) {
         const politician = parseCsvLine(line);
-        db.collection("politicians").updateOne(
+        await db.collection("politicians").updateOne(
           { fullname: politician.fullname },
           { $set: politician },
           { upsert: true }
         );
-      });
-    }
-  );
+      };
+    })
+    .catch(error => console.error("MongoDB: Loading politicians\n" + error));
 
   console.log("MongoDB: Politicians loaded");
 }
