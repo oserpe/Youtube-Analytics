@@ -48,15 +48,17 @@ if (process.env.NODE_ENV == "load") {
 	// .then(() => neo4j.connect(neo4jLoader));
 } else if (process.env.NODE_ENV == "load-neo") {
 	mongoDB
-		.connect(() => {})
-		.then(() => elasticsearch.connect(() => {}))
+		.connect(() => { })
+		.then(() => elasticsearch.connect(() => { }))
 		.then(() => neo4j.connect(neo4jLoader));
 } else if (process.env.NODE_ENV == "load-elastic") {
 	mongoDB
-		.connect(() => {})
+		.connect(() => { })
 		.then(() => elasticsearch.connect(elasticsearchLoader));
 } else {
-	mongoDB.connect(() => {});
+	mongoDB.connect(() => { })
+		.then(() => elasticsearch.connect(() => { }))
+		.then(() => neo4j.connect(() => { }));
 }
 
 process.on("SIGINT", function () {

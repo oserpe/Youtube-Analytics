@@ -4,6 +4,7 @@ let driver;
 
 function connect(callback){
 	driver = neo4j.driver(process.env.NEO4J_URI);
+	console.log("Connected to Neo4j");
     callback();
 }
 

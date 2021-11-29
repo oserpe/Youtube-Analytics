@@ -3,17 +3,21 @@ const mongodb = require("../../databases/mongo");
 const CHANNEL_PAGE_SIZE = 5;
 
 async function getTotalTimePerChannelByVideos(videosId, page) {
+	page = page || 1;
+	if(page < 1) {
+		throw new Error("Page must be greater than 0");
+	}
 
     const db = mongodb.getDB();
 
     const totalVideoDurationPerChannelId = await db.collection("videos").aggregate([
         {
-            $match: { video_id: { $in: videosId } }
+            $match: { '_id': { $in: videosId } }
         },
         {
             $group: {
-                channel_id: channel_id,
-                total_time: { $sum: duration }
+                _id: '$channel_id',
+                total_time: { $sum: '$duration' }
             }
         },
         {
@@ -25,7 +29,7 @@ async function getTotalTimePerChannelByVideos(videosId, page) {
         {
             $limit: CHANNEL_PAGE_SIZE
         }
-    ]);
+    ]).toArray();
 
     return totalVideoDurationPerChannelId;
 };
@@ -35,10 +39,12 @@ async function getChannelsById(channelsId) {
     const db = mongodb.getDB();
 
     const totalVideoDurationPerChannelId = await db.collection("channels").find(
-        { channel_id: { $in: channelsId } }
-    );
-
-    return totalVideoDurationPerChannelId;
+        { _id: { $in: channelsId } }
+    ).toArray();
+	return totalVideoDurationPerChannelId.reduce(function(map, obj) {
+		map[obj._id] = obj.name;
+		return map;
+	}, {});
 }
 
 module.exports = {
