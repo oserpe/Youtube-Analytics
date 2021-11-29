@@ -3,10 +3,10 @@ const mongodb = require("../../databases/mongo");
 const CHANNEL_PAGE_SIZE = 5;
 
 async function getTotalTimePerChannelByVideos(videosId, page) {
-	page = page || 1;
-	if(page < 1) {
-		throw new Error("Page must be greater than 0");
-	}
+    page = page || 1;
+    if (page < 1) {
+        throw new Error("Mongo Service: Page must be greater than 0");
+    }
 
     const db = mongodb.getDB();
 
@@ -41,13 +41,22 @@ async function getChannelsById(channelsId) {
     const totalVideoDurationPerChannelId = await db.collection("channels").find(
         { _id: { $in: channelsId } }
     ).toArray();
-	return totalVideoDurationPerChannelId.reduce(function(map, obj) {
-		map[obj._id] = obj.name;
-		return map;
-	}, {});
+
+    return totalVideoDurationPerChannelId.reduce(function (map, obj) {
+        map[obj._id] = obj.name;
+        return map;
+    }, {});
+}
+
+async function getChannelsName() {
+
+    const db = mongodb.getDB();
+
+    return await db.collection("channels").find({}, { projection: { _id: 0, name: 1 } }).toArray();
 }
 
 module.exports = {
     getTotalTimePerChannelByVideos,
-    getChannelsById
+    getChannelsById,
+    getChannelsName
 }
