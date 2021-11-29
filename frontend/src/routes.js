@@ -1,5 +1,6 @@
 import PoliticianPairsQuery from "./pages/PoliticianPairsQuery";
 import QueryPage from "./pages/QueryPage";
+import WordEvolutionQuery from "./pages/WordEvolutionQuery";
 
 const routes = [
 	{
@@ -28,7 +29,7 @@ const routes = [
 		description:
 			"Cupidatat duis esse officia enim adipisicing amet. Tempor adipisicing magna ad elit voluptate eiusmod.",
 		path: "/query4",
-		component: QueryPage,
+		component: WordEvolutionQuery,
 	},
 	{
 		title: "Recepción de video ante la mención de un político",

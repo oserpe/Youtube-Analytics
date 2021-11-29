@@ -8,12 +8,12 @@ const AUTHORS = [
 		githubLink: "https://github.com/gonzaloarca",
 	},
 	{
-		name: "Octavio Serpe",
-		githubLink: "https://github.com/oserpe",
-	},
-	{
 		name: "Manuel Rodríguez",
 		githubLink: "https://github.com/rodriguezmanueljoaquin",
+	},
+	{
+		name: "Octavio Serpe",
+		githubLink: "https://github.com/oserpe",
 	},
 ];
 

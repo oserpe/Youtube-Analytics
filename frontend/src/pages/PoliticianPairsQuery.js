@@ -2,9 +2,11 @@ import React from "react";
 import routes from "../routes";
 import QueryPage from "./QueryPage";
 import Table from "../components/Table";
-import { Autocomplete, TextField } from "@mui/material";
+import { Autocomplete, Box, TextField } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import ExecuteButton from "../components/ExecuteButton";
+import channels from "../channels";
+import LiveTvIcon from "@mui/icons-material/LiveTv";
 
 const ROUTE_INDEX = 0;
 
@@ -38,24 +40,13 @@ const rows = [
 	{ id: 19, pair: "Macri - Alberto Fernández", timesMentioned: 330 },
 ];
 
-const channels = [
-	{ label: "TN" },
-	{ label: "C5N" },
-	{ label: "La Nación+" },
-	{ label: "América TV" },
-	{ label: "El Trece" },
-	{ label: "Crónica TV" },
-	{ label: "El Destape" },
-	{ label: "A24" },
-];
-
 const useStyles = makeStyles((theme) => ({
 	contentContainer: {
 		display: "flex",
 		flexDirection: "column",
 		justifyContent: "center",
 		margin: "3rem auto",
-		height: 650,
+		height: 675,
 		width: "80%",
 	},
 	actionsContainer: {
@@ -74,13 +65,16 @@ const PoliticianPairsQuery = () => {
 		<QueryPage title={title} description={description}>
 			<div className={classes.contentContainer}>
 				<div className={classes.actionsContainer}>
-					<Autocomplete
-						disablePortal
-						id="combo-box-demo"
-						options={channels}
-						sx={{ width: 300 }}
-						renderInput={(params) => <TextField {...params} label="Canal" />}
-					/>
+					<Box sx={{ display: "flex", alignItems: "center" }}>
+						<LiveTvIcon fontSize="large" sx={{ mr: 1 }} />
+
+						<Autocomplete
+							disablePortal
+							options={channels}
+							sx={{ width: 300 }}
+							renderInput={(params) => <TextField {...params} label="Canal" />}
+						/>
+					</Box>
 
 					<div style={{ marginBottom: 0, marginTop: "auto" }}>
 						<ExecuteButton onClick={() => {}} />
