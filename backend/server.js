@@ -31,9 +31,9 @@ app.use((req, res, next) => {
 });
 
 app.use((error, req, res, next) => {
-	const status = error.status || 500;
-	const message = error.message || "Internal server error";
-	res.status(status).json({ message });
+  const status = error.status || 500;
+  const message = error.message || "Internal server error";
+  res.status(status).json({ message });
 });
 
 const port = process.env.PORT || 5000;
