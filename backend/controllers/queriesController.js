@@ -31,7 +31,20 @@ async function politicianTimePerChannel(req, res, next) {
 	}
 }
 
+async function politiciansPairsMentions(req, res, next) {
+	try {
+		const channelNameParsed = req.params.channelName.split("-").join(" ");
+		const politiciansPairsMentions = await neo4jService.getPoliticiansPairsMentions(channelNameParsed);
+		res.json(politiciansPairsMentions);
+	}
+	catch (error) {
+		console.error("politiciansPairsMentions: " + error);
+		next(error);
+	}
+}
+
 
 module.exports = {
 	politicianTimePerChannel,
+	politiciansPairsMentions
 }
