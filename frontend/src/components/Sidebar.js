@@ -35,6 +35,7 @@ const useStyles = makeStyles((theme) => ({
 const Sidebar = ({ routes }) => {
 	const classes = useStyles();
 	const [currentRoute, setCurrentRoute] = useState(window.location.pathname);
+	// TODO: arreglar este fix nefasto
 	const isSelected = (route) =>
 		route.path === currentRoute ||
 		(route.path === "/query1" && currentRoute === "/");
@@ -49,7 +50,6 @@ const Sidebar = ({ routes }) => {
 				onClick={() => {
 					onClick(route.path);
 				}}
-				// TODO: arreglar este fix nefasto
 				selected={isSelected(route)}
 				classes={{ selected: classes.selectedTab }}
 				button
@@ -63,7 +63,9 @@ const Sidebar = ({ routes }) => {
 					/>
 				</ListItemIcon>
 
-				<ListItemText primary={route.title} />
+				<ListItemText
+					primary={<Typography variant="subtitle2">{route.title}</Typography>}
+				/>
 			</ListItem>
 		));
 	};
@@ -99,7 +101,7 @@ const Sidebar = ({ routes }) => {
 				</Toolbar>
 
 				<Divider />
-				<Typography m={2} mb={1} variant="h6">
+				<Typography m={2} mb={1} variant="subtitle1">
 					Queries
 				</Typography>
 

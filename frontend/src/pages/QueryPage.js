@@ -4,19 +4,12 @@ import QueryHeader from "../components/QueryHeader";
 
 const useStyles = makeStyles((theme) => ({
 	headerContainer: {
-		marginTop: "3rem",
-		marginLeft: "2rem",
-	},
-	dataVisualizerContainer: {
-		display: "flex",
-		margin: "3rem auto",
-		height: "600px",
-		width: "70%",
-		backgroundColor: "#f9f9f9",
+		marginTop: "4rem",
+		marginLeft: "4rem",
 	},
 }));
 
-const QueryPage = ({ title, description, dataVisualizer }) => {
+const QueryPage = ({ title, description, children }) => {
 	const classes = useStyles();
 
 	return (
@@ -24,7 +17,7 @@ const QueryPage = ({ title, description, dataVisualizer }) => {
 			<div className={classes.headerContainer}>
 				<QueryHeader title={title} description={description} />
 			</div>
-			<div className={classes.dataVisualizerContainer}>{dataVisualizer}</div>
+			{children}
 		</div>
 	);
 };

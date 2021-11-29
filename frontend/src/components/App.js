@@ -5,11 +5,15 @@ import routes from "../routes";
 import { themeUtils } from "../theme";
 
 import "./App.css";
+import Footer from "./Footer";
 import Sidebar from "./Sidebar";
 
 const useStyles = makeStyles((theme) => ({
 	pageContainer: {
 		paddingLeft: themeUtils.sidebarWidth,
+		width: `calc(100% - ${themeUtils.sidebarWidth}px)`,
+		marginRight: 0,
+		marginLeft: "auto",
 	},
 }));
 
@@ -32,6 +36,7 @@ const App = () => {
 						/>
 					))}
 				</Switch>
+				<Footer />
 			</div>
 		</div>
 	);

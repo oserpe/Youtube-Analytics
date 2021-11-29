@@ -11,8 +11,13 @@ export const themeUtils = {
 		red: {
 			main: "#ff0000",
 		},
+		grey: {
+			main: "#a7a7a7",
+		},
 	},
 	sidebarWidth: 280,
+	footerHeight: 100,
+	sidebarItemFontSize: "0.8rem",
 };
 const headerWeight = 500;
 
