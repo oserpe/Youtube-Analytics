@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import routes from "../routes";
 import QueryPage from "./QueryPage";
 import Table from "../components/Table";
@@ -7,6 +7,8 @@ import { makeStyles } from "@mui/styles";
 import ExecuteButton from "../components/ExecuteButton";
 import LiveTvIcon from "@mui/icons-material/LiveTv";
 import ChannelsContext from "../context/ChannelsContext";
+import ytAnalyticsApi from "../apis/ytAnalyticsApi";
+import FullscreenCircularLoader from "../components/FullscreenCircularLoader";
 
 const ROUTE_INDEX = 0;
 
@@ -58,11 +60,49 @@ const useStyles = makeStyles((theme) => ({
 
 const PoliticianPairsQuery = () => {
 	const classes = useStyles();
-	const { channels, isLoading } = useContext(ChannelsContext);
+	const { channels, isLoadingChannels } = useContext(ChannelsContext);
+	const [queryResults, setQueryResults] = useState({});
+	const [currentPage, setCurrentPage] = useState(0);
+	const [isLoadingQuery, setIsLoadingQuery] = useState(false);
+	const [selectedChannel, setSelectedChannel] = useState("");
 
 	const { title, description } = routes[ROUTE_INDEX];
 
-	return (
+	const handleQuery = async () => {
+		try {
+			setIsLoadingQuery(true);
+			const encodedChannel = selectedChannel.name.replace(" ", "_");
+			const response = await ytAnalyticsApi.get(
+				"/politicians-pairs-mentions/" + encodedChannel,
+				{
+					params: {
+						page: currentPage + 1,
+					},
+				}
+			);
+
+			setQueryResults({ ...queryResults, [currentPage]: response.data });
+			setIsLoadingQuery(false);
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
+	const handleChange = (value) => {
+		setSelectedChannel(value);
+	};
+
+	const handlePageChange = (number) => {
+		setCurrentPage(number);
+
+		if (currentPage in queryResults) return;
+
+		handleQuery();
+	};
+
+	return isLoadingChannels || isLoadingQuery ? (
+		<FullscreenCircularLoader />
+	) : (
 		<QueryPage title={title} description={description}>
 			<div className={classes.contentContainer}>
 				<div className={classes.actionsContainer}>
@@ -70,19 +110,27 @@ const PoliticianPairsQuery = () => {
 						<LiveTvIcon fontSize="large" sx={{ mr: 1 }} />
 
 						<Autocomplete
+							value={selectedChannel}
+							onChange={(_, value) => handleChange(value)}
 							disablePortal
 							options={channels}
-							getOptionLabel={(option) => option.name}
+							getOptionLabel={(option) => option.name || ""}
 							sx={{ width: 300 }}
 							renderInput={(params) => <TextField {...params} label="Canal" />}
 						/>
 					</Box>
 
 					<div style={{ marginBottom: 0, marginTop: "auto" }}>
-						<ExecuteButton onClick={() => {}} />
+						<ExecuteButton onClick={handleQuery} disabled={!selectedChannel} />
 					</div>
 				</div>
-				<Table rows={rows} columns={columns} />
+
+				<Table
+					page={currentPage}
+					onPageChange={handlePageChange}
+					rows={queryResults[currentPage]}
+					columns={columns}
+				/>
 			</div>
 		</QueryPage>
 	);
