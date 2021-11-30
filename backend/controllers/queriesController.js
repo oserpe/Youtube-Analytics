@@ -58,7 +58,7 @@ async function politiciansPairsMentions(req, res, next) {
 		const channelName = req.params.channelName;
 		const politicianPairsMentions = await neo4jService.getPoliticiansPairsMentions(channelName, req.query.page);
 		const maxPage = await neo4jService.getPoliticiansPairsMentionsMaxPage(channelName);
-		paginationService.getPaginatedResponse(res, req.query.page, maxPage, '/politiciansPairsMentions/' + encodeURIComponent(channelName));
+		paginationService.getPaginatedResponse(res, req.query.page, maxPage, '/politician-pairs-mentions/' + encodeURIComponent(channelName));
 		res.json(politicianPairsMentions);
 	}
 	catch (error) {
