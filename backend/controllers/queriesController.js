@@ -4,10 +4,9 @@ const elasticSearchService = require("../services/queriesService/elasticSearchSe
 
 const WORD_DELIMITER = '_';
 
+// TODO: MODULARIZAR LAS DOS SIGUIENTES FUNCIONES EN UNA SOLA?
 async function politicianTimePerChannel(req, res, next) {
-
 	try {
-		// TODO: verificar que se envie tokenizado por "-"
 		const politicianFullname = req.params.politician.split(WORD_DELIMITER).join(" ");
 		const videosId = await neo4jService.getVideosByPolitician(politicianFullname);
 		const totalTimePerChannelByVideos = await mongodbService
@@ -31,14 +30,38 @@ async function politicianTimePerChannel(req, res, next) {
 	}
 }
 
-async function politiciansPairsMentions(req, res, next) {
+async function politiciansLikenessPerChannel(req, res, next) {
 	try {
-		const channelNameParsed = req.params.channelName.split(WORD_DELIMITER).join(" ");
-		const politiciansPairsMentions = await neo4jService.getPoliticiansPairsMentions(channelNameParsed, req.query.page);
-		res.json(politiciansPairsMentions);
+		const politicianFullname = req.params.politician.split(WORD_DELIMITER).join(" ");
+		const videosId = await neo4jService.getVideosByPolitician(politicianFullname);
+		const politiciansLikenessPerChannel = await mongodbService
+			.getPoliticiansLikenessPerChannel(videosId, req.query.page);
+		const channelsNameMap = await mongodbService
+			.getChannelsById(politiciansLikenessPerChannel.map(channel => channel._id));
+
+		const politiciansLikenessPerChannelResponse = politiciansLikenessPerChannel.map(channelData => {
+			const channelName = channelsNameMap[channelData._id];
+			return {
+				...channelData,
+				channelName
+			}
+		});
+		res.json(politiciansLikenessPerChannelResponse);
 	}
 	catch (error) {
-		console.error("politiciansPairsMentions: " + error);
+		console.error("politiciansLikenessPerChannel: " + error);
+		next(error);
+	}
+}
+
+async function politicianPairsMentions(req, res, next) {
+	try {
+		const channelNameParsed = req.params.channelName.split(WORD_DELIMITER).join(" ");
+		const politicianPairsMentions = await neo4jService.getPoliticianPairsMentions(channelNameParsed, req.query.page);
+		res.json(politicianPairsMentions);
+	}
+	catch (error) {
+		console.error("politicianPairsMentions: " + error);
 		next(error);
 	}
 }
@@ -78,7 +101,8 @@ async function searchMentions(req, res, next) {
 
 module.exports = {
 	politicianTimePerChannel,
-	politiciansPairsMentions,
+	politiciansPairsMentions: politicianPairsMentions,
 	channelNames,
-	searchMentions
+	searchMentions,
+	politiciansLikenessPerChannel
 }
