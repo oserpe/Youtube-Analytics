@@ -1,4 +1,4 @@
-const neo4j = require("../../databases/neo4j");
+const neo4j = require("../databases/neo4j");
 
 const CHANNEL_PAGE_SIZE = 5;
 
@@ -12,7 +12,7 @@ async function getVideosByPolitician(politicianFullname) {
     return videosIdsRecords.records.map(record => record.get(0));
 }
 
-async function getPoliticianPairsMentions(channelName, page) {
+async function getPoliticiansPairsMentions(channelName, page) {
     const session = neo4j.getSession();
 
     page = page || 1;
@@ -44,5 +44,5 @@ async function getPoliticianPairsMentions(channelName, page) {
 
 module.exports = {
     getVideosByPolitician,
-    getPoliticianPairsMentions
+    getPoliticiansPairsMentions
 }

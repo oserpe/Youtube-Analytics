@@ -1,4 +1,4 @@
-const elasticDB = require("../../databases/elasticsearch");
+const elasticDB = require("../databases/elasticsearch");
 const ELASTIC_SEARCH_SIZE = 10000;
 
 async function getSearchMentions(query, from, page) {

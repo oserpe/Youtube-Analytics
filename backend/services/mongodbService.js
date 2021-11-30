@@ -1,4 +1,4 @@
-const mongodb = require("../../databases/mongo");
+const mongodb = require("../databases/mongo");
 
 const CHANNEL_PAGE_SIZE = 5;
 
