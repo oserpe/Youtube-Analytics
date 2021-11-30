@@ -1,6 +1,6 @@
 const neo4j = require("../databases/neo4j");
 
-const CHANNEL_PAGE_SIZE = 1;
+const CHANNEL_PAGE_SIZE = 8;
 
 async function getVideosByPolitician(politicianFullname) {
 	const session = neo4j.getSession();
