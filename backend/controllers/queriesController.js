@@ -1,6 +1,7 @@
 const neo4jService = require("../services/neo4jService");
 const mongodbService = require("../services/mongodbService");
 const elasticSearchService = require("../services/elasticSearchService.js");
+const paginationService = require("../services/paginationService.js");
 
 // TODO: MODULARIZAR LAS DOS SIGUIENTES FUNCIONES EN UNA SOLA?
 async function politicianTimePerChannel(req, res, next) {
@@ -56,6 +57,8 @@ async function politiciansPairsMentions(req, res, next) {
 	try {
 		const channelName = req.params.channelName;
 		const politicianPairsMentions = await neo4jService.getPoliticiansPairsMentions(channelName, req.query.page);
+		const maxPage = await neo4jService.getPoliticiansPairsMentionsMaxPage(channelName);
+		paginationService.getPaginatedResponse(res, req.query.page, maxPage, '/politiciansPairsMentions/' + channelName)
 		res.json(politicianPairsMentions);
 	}
 	catch (error) {
@@ -77,8 +80,7 @@ async function channelNames(req, res, next) {
 
 async function searchMentions(req, res, next) {
 	try {
-		const mentionsCount = await elasticSearchService.getSearchMentions(req.params.query, req.query.from, req.query.page);
-		const mentionsCount = await elasticSearchService.getSearchMentions(query, req.query.from, req.query.page);
+		const mentionsCount = await elasticSearchService.getSearchMentions(req.params.query, req.query.from);
 		const channelsNameMap = await mongodbService
 			.getChannelsById(mentionsCount.map(channel => channel.key));
 

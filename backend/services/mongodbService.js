@@ -1,7 +1,5 @@
 const mongodb = require("../databases/mongo");
 
-const CHANNEL_PAGE_SIZE = 5;
-
 async function getTotalTimePerChannelByVideos(videosId) {
 	const db = mongodb.getDB();
 

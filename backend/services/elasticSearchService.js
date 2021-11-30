@@ -1,12 +1,8 @@
 const elasticDB = require("../databases/elasticsearch");
 const ELASTIC_SEARCH_SIZE = 10000;
 
-async function getSearchMentions(query, from, page) {
+async function getSearchMentions(query, from) {
 	const elasticClient = elasticDB.getDB();
-	page = page || 1;
-	if (page < 1) {
-		throw new Error("ElasticSearch Service: Page must be greater than 0");
-	}
 
 	if (from) {
 		const dateParts = from.split("/");
@@ -70,7 +66,6 @@ async function getSearchMentions(query, from, page) {
 			// }
 		}
 	});
-
 	return body.aggregations.results.buckets;
 }
 async function getMentionsEvolution(query, channelsId) {

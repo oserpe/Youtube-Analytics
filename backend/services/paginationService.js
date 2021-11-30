@@ -1,22 +1,20 @@
-const { link } = require("fs");
-
-function getPaginatedResponse(response, page, maxPage, path) {
+function getPaginatedResponse(res, pageString, maxPageString, path) {
+	page = parseInt(pageString) || 1;
+	maxPage = parseInt(maxPageString);
+	const fullPath = process.env.SERVER_API + path;
 	if (maxPage > 0) {
-		let links = {};
 		if (page != 1) {
-			links['first'] = path + '?page=1';
+			res.append("Link", `<${fullPath}?page=1>; rel="first"`);
 			if (page > 1 && page < maxPage)
-				link['prev'] = path + '?page=' + (page - 1);
+				res.append("Link", `<${fullPath}?page=${page - 1}>; rel="prev"`);
 		}
 
 		if (page != maxPage) {
-			links['last'] = path + '?page=' + maxPage;
+			res.append("Link", `<${fullPath}?page=${maxPage}>; rel="last"`);
 			if (page >= 1 && page < maxPage)
-				links['next'] = path + '?page=' + (page + 1);
+				res.append("Link", `<${fullPath}?page=${page + 1}>; rel="next"`);
 		}
 	}
-	response.links(links);
-	return response;
 }
 
 module.exports = {
