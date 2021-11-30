@@ -71,10 +71,71 @@ async function getSearchMentions(query, from, page) {
 		}
 	});
 
-	console.log(body);
 	return body.aggregations.results.buckets;
+}
+async function getMentionsEvolution(query, channelsId) {
+	const elasticClient = elasticDB.getDB();
+	const channelsQueryString = channelsId
+		.map((id) => `(${id})`)
+		.join(" OR ");
+	from = new Date().setDate(new Date().getDate() - 14);
+
+	const { body } = await elasticClient.search({
+		index: "videos",
+		body: {
+			size: 0,
+			query: {
+				bool: {
+					must: [
+						{
+						query_string: {
+							fields: ["title", "description"],
+							query: query,
+							default_operator: "AND",
+						}
+					},
+					{
+						query_string: {
+							fields: ["channel_id"],
+							query: channelsQueryString,
+							default_operator: "AND",
+						}
+					}
+				]
+				}
+			},
+			aggs: {
+				filterByDate: {
+					filter: {
+						range: {
+							published_at: {
+								gte: from,
+							}
+						}
+					},
+					aggs: {
+						dateStats: {
+							date_histogram: {
+								field: 'published_at',
+								interval: 'day',
+								extended_bounds: {
+									min: from,
+									max: new Date()
+								}
+							}
+						}
+					}
+				}
+			},
+		}
+	});
+
+	return body.aggregations.filterByDate.dateStats.buckets
+		.map((bucket) => { return { date: bucket.key_as_string, count: bucket.doc_count } }
+		);
 }
 
 module.exports = {
-	getSearchMentions
+	getSearchMentions,
+	getMentionsEvolution
 }

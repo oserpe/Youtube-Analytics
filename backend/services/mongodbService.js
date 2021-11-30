@@ -37,17 +37,29 @@ async function getTotalTimePerChannelByVideos(videosId, page) {
 async function getChannelsById(channelsId) {
 	const db = mongodb.getDB();
 
-	const totalVideoDurationPerChannelId = await db.collection("channels").find(
+	const channels = await db.collection("channels").find(
 		{ _id: { $in: channelsId } }
 	).toArray();
 
-	return totalVideoDurationPerChannelId.reduce(function (map, obj) {
+	return channels.reduce(function (map, obj) {
 		map[obj._id] = obj.name;
 		return map;
 	}, {});
 }
 
-async function getchannelNames() {
+async function getChannelsIdsByName(channelsName) {
+	const db = mongodb.getDB();
+	console.log("CHANNELS NAME=====", channelsName)
+	const queryChannelsName = channelsName ? { name: { $in: channelsName } } : {};
+	const channels = await db.collection("channels").find(queryChannelsName).toArray();
+
+	return channels.reduce(function (map, obj) {
+		map[obj.name] = obj._id;
+		return map;
+	}, {});
+}
+
+async function getChannelNames() {
 	const db = mongodb.getDB();
 
 	return await db.collection("channels").find({}, { projection: { _id: 0, name: 1 } }).toArray();
@@ -61,7 +73,6 @@ async function getPoliticiansLikenessPerChannel(videosId, page) {
 
 	const db = mongodb.getDB();
 
-	console.log(videosId)
 	const politiciansLikenessPerChannel = await db.collection("videos").aggregate([
 		{
 			$match: { '_id': { $in: videosId } }
@@ -83,13 +94,13 @@ async function getPoliticiansLikenessPerChannel(videosId, page) {
 			$limit: CHANNEL_PAGE_SIZE
 		}
 	]).toArray();
-	console.log(politiciansLikenessPerChannel)
 	return politiciansLikenessPerChannel;
 }
 
 module.exports = {
 	getTotalTimePerChannelByVideos,
 	getChannelsById,
-	getchannelNames,
+	getChannelsIdsByName,
+	getChannelNames,
 	getPoliticiansLikenessPerChannel
 }

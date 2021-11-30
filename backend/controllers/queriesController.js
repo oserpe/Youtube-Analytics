@@ -66,7 +66,7 @@ async function politiciansPairsMentions(req, res, next) {
 
 async function channelNames(req, res, next) {
 	try {
-		const channelNames = await mongodbService.getchannelNames();
+		const channelNames = await mongodbService.getChannelNames();
 		res.json(channelNames);
 	}
 	catch (error) {
@@ -77,7 +77,7 @@ async function channelNames(req, res, next) {
 
 async function searchMentions(req, res, next) {
 	try {
-		const query = req.params.query;
+		const mentionsCount = await elasticSearchService.getSearchMentions(req.params.query, req.query.from, req.query.page);
 		const mentionsCount = await elasticSearchService.getSearchMentions(query, req.query.from, req.query.page);
 		const channelsNameMap = await mongodbService
 			.getChannelsById(mentionsCount.map(channel => channel.key));
@@ -97,10 +97,24 @@ async function searchMentions(req, res, next) {
 	}
 }
 
+async function mentionsEvolution(req, res, next) {
+	try {
+		const channelsName = req?.query?.channels;
+		const channelsMap = await mongodbService.getChannelsIdsByName(channelsName);
+		const mentionsEvolution =
+			await elasticSearchService.getMentionsEvolution(req.params.query, Object.values(channelsMap));
+		res.json(mentionsEvolution);
+	} catch (error) {
+		console.error("mentionsEvolution: " + error);
+		next(error);
+	}
+}
+
 module.exports = {
 	politicianTimePerChannel,
 	politiciansPairsMentions,
 	channelNames,
 	searchMentions,
-	politiciansLikenessPerChannel
+	politiciansLikenessPerChannel,
+	mentionsEvolution
 }
