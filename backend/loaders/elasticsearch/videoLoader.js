@@ -5,7 +5,6 @@ async function load() {
 	const mongoClient = mongoDB.getDB();
 	const elasticClient = elasticDB.getDB();
 
-
 	try {
 		await elasticClient.indices.delete({
 			index: "videos"
@@ -41,7 +40,7 @@ async function load() {
 				mappings: {
 					video: {
 						properties: {
-							video_id: { type: "text" },
+							video_id: { type: "keyword" },
 							title: {
 								type: "text",
 								analyzer: "my_analyzer",
@@ -50,7 +49,7 @@ async function load() {
 								type: "text",
 								analyzer: "my_analyzer",
 							},
-							channel_id: { type: "text" },
+							channel_id: { type: "keyword" },
 							published_at: {
 								type: "date",
 							},

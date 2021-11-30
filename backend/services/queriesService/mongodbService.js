@@ -48,7 +48,7 @@ async function getChannelsById(channelsId) {
     }, {});
 }
 
-async function getChannelsName() {
+async function getchannelNames() {
 
     const db = mongodb.getDB();
 
@@ -58,5 +58,5 @@ async function getChannelsName() {
 module.exports = {
     getTotalTimePerChannelByVideos,
     getChannelsById,
-    getChannelsName
+    getchannelNames
 }
