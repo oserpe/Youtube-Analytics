@@ -2,12 +2,7 @@ const mongodb = require("../databases/mongo");
 
 const CHANNEL_PAGE_SIZE = 5;
 
-async function getTotalTimePerChannelByVideos(videosId, page) {
-	page = page || 1;
-	if (page < 1) {
-		throw new Error("Mongo Service: Page must be greater than 0");
-	}
-
+async function getTotalTimePerChannelByVideos(videosId) {
 	const db = mongodb.getDB();
 
 	const totalVideoDurationPerChannelId = await db.collection("videos").aggregate([
@@ -22,12 +17,6 @@ async function getTotalTimePerChannelByVideos(videosId, page) {
 		},
 		{
 			$sort: { total_time: -1 }
-		},
-		{
-			$skip: CHANNEL_PAGE_SIZE * (page - 1)
-		},
-		{
-			$limit: CHANNEL_PAGE_SIZE
 		}
 	]).toArray();
 
@@ -49,7 +38,6 @@ async function getChannelsById(channelsId) {
 
 async function getChannelsIdsByName(channelsName) {
 	const db = mongodb.getDB();
-	console.log("CHANNELS NAME=====", channelsName)
 	const queryChannelsName = channelsName ? { name: { $in: channelsName } } : {};
 	const channels = await db.collection("channels").find(queryChannelsName).toArray();
 
@@ -65,12 +53,7 @@ async function getChannelNames() {
 	return await db.collection("channels").find({}, { projection: { _id: 0, name: 1 } }).toArray();
 }
 
-async function getPoliticiansLikenessPerChannel(videosId, page) {
-	page = page || 1;
-	if (page < 1) {
-		throw new Error("Mongo Service: Page must be greater than 0");
-	}
-
+async function getPoliticiansLikenessPerChannel(videosId) {
 	const db = mongodb.getDB();
 
 	const politiciansLikenessPerChannel = await db.collection("videos").aggregate([
@@ -86,12 +69,6 @@ async function getPoliticiansLikenessPerChannel(videosId, page) {
 		},
 		{
 			$sort: { _id: -1 }
-		},
-		{
-			$skip: CHANNEL_PAGE_SIZE * (page - 1)
-		},
-		{
-			$limit: CHANNEL_PAGE_SIZE
 		}
 	]).toArray();
 	return politiciansLikenessPerChannel;

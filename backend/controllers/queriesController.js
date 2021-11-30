@@ -8,7 +8,7 @@ async function politicianTimePerChannel(req, res, next) {
 		const politicianFullname = req.params.politician;
 		const videosId = await neo4jService.getVideosByPolitician(politicianFullname);
 		const totalTimePerChannelByVideos = await mongodbService
-			.getTotalTimePerChannelByVideos(videosId, req.query.page);
+			.getTotalTimePerChannelByVideos(videosId);
 		const channelsNameMap = await mongodbService
 			.getChannelsById(totalTimePerChannelByVideos.map(channel => channel._id));
 
@@ -33,7 +33,7 @@ async function politiciansLikenessPerChannel(req, res, next) {
 		const politicianFullname = req.params.politician;
 		const videosId = await neo4jService.getVideosByPolitician(politicianFullname);
 		const politiciansLikenessPerChannel = await mongodbService
-			.getPoliticiansLikenessPerChannel(videosId, req.query.page);
+			.getPoliticiansLikenessPerChannel(videosId);
 		const channelsNameMap = await mongodbService
 			.getChannelsById(politiciansLikenessPerChannel.map(channel => channel._id));
 
