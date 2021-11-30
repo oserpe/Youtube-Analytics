@@ -43,12 +43,12 @@ const Footer = () => {
 	const renderAuthors = () => {
 		return AUTHORS.map((author) => {
 			return (
-				<>
+				<React.Fragment key={author.name}>
 					<a className={classes.link} href={author.githubLink}>
 						{author.name}
 					</a>
 					{", "}
-				</>
+				</React.Fragment>
 			);
 		});
 	};

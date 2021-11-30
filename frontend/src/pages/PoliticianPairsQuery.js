@@ -1,12 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import routes from "../routes";
 import QueryPage from "./QueryPage";
 import Table from "../components/Table";
 import { Autocomplete, Box, TextField } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import ExecuteButton from "../components/ExecuteButton";
-import channels from "../channels";
 import LiveTvIcon from "@mui/icons-material/LiveTv";
+import ChannelsContext from "../context/ChannelsContext";
 
 const ROUTE_INDEX = 0;
 
@@ -58,6 +58,7 @@ const useStyles = makeStyles((theme) => ({
 
 const PoliticianPairsQuery = () => {
 	const classes = useStyles();
+	const { channels, isLoading } = useContext(ChannelsContext);
 
 	const { title, description } = routes[ROUTE_INDEX];
 
@@ -71,6 +72,7 @@ const PoliticianPairsQuery = () => {
 						<Autocomplete
 							disablePortal
 							options={channels}
+							getOptionLabel={(option) => option.name}
 							sx={{ width: 300 }}
 							renderInput={(params) => <TextField {...params} label="Canal" />}
 						/>

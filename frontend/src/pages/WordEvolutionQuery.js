@@ -1,6 +1,6 @@
 import { Autocomplete, Box, Checkbox, TextField } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import React from "react";
+import React, { useContext } from "react";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import LiveTvIcon from "@mui/icons-material/LiveTv";
@@ -16,10 +16,10 @@ import {
 	ResponsiveContainer,
 } from "recharts";
 
-import channels from "../channels";
 import ExecuteButton from "../components/ExecuteButton";
 import routes from "../routes";
 import QueryPage from "./QueryPage";
+import ChannelsContext from "../context/ChannelsContext";
 
 const ROUTE_INDEX = 3;
 
@@ -53,6 +53,7 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
 const WordEvolutionQuery = () => {
 	const classes = useStyles();
+	const { channels, isLoading } = useContext(ChannelsContext);
 
 	const { title, description } = routes[ROUTE_INDEX];
 
@@ -68,7 +69,7 @@ const WordEvolutionQuery = () => {
 							id="checkboxes-tags-demo"
 							options={channels}
 							disableCloseOnSelect
-							getOptionLabel={(option) => option.label}
+							getOptionLabel={(option) => option.name}
 							renderOption={(props, option, { selected }) => (
 								<li {...props}>
 									<Checkbox
@@ -77,7 +78,7 @@ const WordEvolutionQuery = () => {
 										style={{ marginRight: 8 }}
 										checked={selected}
 									/>
-									{option.label}
+									{option.name}
 								</li>
 							)}
 							style={{ width: 500 }}
