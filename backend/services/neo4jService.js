@@ -29,8 +29,10 @@ async function getPoliticiansPairsMentionsMaxPage(channelName) {
 
 	const result = await session.run(
 		getPoliticianPairsMentionsQuery(channelName) +
-			` RETURN COUNT(r1) AS totalMentions`
+		`WITH DISTINCT p1.fullname AS x, p2.fullname AS y
+		RETURN COUNT(*) AS totalMentions`
 	);
+	console.log(Math.ceil(result.records[0].get(0).toNumber() / CHANNEL_PAGE_SIZE))
 	return Math.ceil(result.records[0].get(0).toNumber() / CHANNEL_PAGE_SIZE);
 }
 
@@ -47,7 +49,7 @@ async function getPoliticiansPairsMentions(channelName, page) {
 
 	const pairs = await session.run(
 		getPoliticianPairsMentionsQuery(channelName) +
-			` RETURN p1.fullname, p2.fullname, count(r1) AS mentions, collect(r1.video_id) AS video_ids
+		` RETURN p1.fullname, p2.fullname, count(r1) AS mentions, collect(r1.video_id) AS video_ids
 		ORDER BY mentions DESC, p1.fullname, p2.fullname
 		SKIP ${skip} LIMIT ${limit}`
 	);
