@@ -1,4 +1,5 @@
 import PoliticianPairsQuery from "./pages/PoliticianPairsQuery";
+import PoliticianTimePerChannelQuery from "./pages/PoliticianTimePerChannelQuery";
 import QueryPage from "./pages/QueryPage";
 import WordEvolutionQuery from "./pages/WordEvolutionQuery";
 
@@ -15,7 +16,7 @@ const routes = [
 		description:
 			"Est ea deserunt anim dolore. Laboris sit est qui tempor mollit quis mollit ut. Culpa do elit quis cupidatat commodo incididunt velit consequat amet id voluptate.",
 		path: "/query2",
-		component: QueryPage,
+		component: PoliticianTimePerChannelQuery,
 	},
 	{
 		title: "Número de menciones de una palabra en un período",

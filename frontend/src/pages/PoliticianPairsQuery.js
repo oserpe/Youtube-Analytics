@@ -1,16 +1,19 @@
-import React, { useContext, useState } from "react";
-import routes from "../routes";
-import QueryPage from "./QueryPage";
-import Table from "../components/Table";
-import { Autocomplete, Box, TextField } from "@mui/material";
+import React, { useContext, useEffect, useState } from "react";
+import { Autocomplete, Box, CircularProgress, TextField } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import ExecuteButton from "../components/ExecuteButton";
 import LiveTvIcon from "@mui/icons-material/LiveTv";
+
+import routes from "../routes";
+import QueryPage from "./QueryPage";
+import Table from "../components/Table";
 import ChannelsContext from "../context/ChannelsContext";
-import ytAnalyticsApi from "../apis/ytAnalyticsApi";
 import FullscreenCircularLoader from "../components/FullscreenCircularLoader";
+import { usePairsQuery } from "../hooks";
+import SimpleAutocompleteDropdown from "../components/SimpleAutocompleteDropdown";
 
 const ROUTE_INDEX = 0;
+const PAGE_SIZE = 8;
 
 const columns = [
 	{
@@ -21,25 +24,13 @@ const columns = [
 		align: "left",
 	},
 	{
-		field: "timesMentioned",
+		field: "mentions",
 		headerName: "Veces nombrado",
 		type: "number",
 		flex: 1,
 		headerAlign: "left",
 		align: "left",
 	},
-];
-const rows = [
-	{ id: 1, pair: "Macri - CFK", timesMentioned: 20 },
-	{ id: 2, pair: "Macri - Alberto Fernández", timesMentioned: 330 },
-	{ id: 3, pair: "Macri - CFK", timesMentioned: 20 },
-	{ id: 4, pair: "Macri - Alberto Fernández", timesMentioned: 330 },
-	{ id: 5, pair: "Macri - CFK", timesMentioned: 20 },
-	{ id: 6, pair: "Macri - Alberto Fernández", timesMentioned: 330 },
-	{ id: 7, pair: "Macri - CFK", timesMentioned: 20 },
-	{ id: 8, pair: "Macri - Alberto Fernández", timesMentioned: 330 },
-	{ id: 9, pair: "Macri - CFK", timesMentioned: 20 },
-	{ id: 19, pair: "Macri - Alberto Fernández", timesMentioned: 330 },
 ];
 
 const useStyles = makeStyles((theme) => ({
@@ -65,23 +56,24 @@ const PoliticianPairsQuery = () => {
 	const [currentPage, setCurrentPage] = useState(0);
 	const [isLoadingQuery, setIsLoadingQuery] = useState(false);
 	const [selectedChannel, setSelectedChannel] = useState("");
+	const { links, getPairsQueryResults } = usePairsQuery();
 
 	const { title, description } = routes[ROUTE_INDEX];
+	const isQueryExecuted = Object.keys(queryResults).length > 0;
+
+	useEffect(() => {
+		if (currentPage in queryResults || !isQueryExecuted) return;
+
+		handleQuery();
+	}, [currentPage]);
 
 	const handleQuery = async () => {
 		try {
 			setIsLoadingQuery(true);
-			const encodedChannel = selectedChannel.name.replace(" ", "_");
-			const response = await ytAnalyticsApi.get(
-				"/politicians-pairs-mentions/" + encodedChannel,
-				{
-					params: {
-						page: currentPage + 1,
-					},
-				}
-			);
 
-			setQueryResults({ ...queryResults, [currentPage]: response.data });
+			const results = await getPairsQueryResults(selectedChannel, currentPage);
+			setQueryResults({ ...queryResults, [currentPage]: results });
+
 			setIsLoadingQuery(false);
 		} catch (error) {
 			console.log(error);
@@ -94,43 +86,51 @@ const PoliticianPairsQuery = () => {
 
 	const handlePageChange = (number) => {
 		setCurrentPage(number);
-
-		if (currentPage in queryResults) return;
-
-		handleQuery();
 	};
 
-	return isLoadingChannels || isLoadingQuery ? (
+	return isLoadingChannels ? (
 		<FullscreenCircularLoader />
 	) : (
 		<QueryPage title={title} description={description}>
 			<div className={classes.contentContainer}>
 				<div className={classes.actionsContainer}>
-					<Box sx={{ display: "flex", alignItems: "center" }}>
-						<LiveTvIcon fontSize="large" sx={{ mr: 1 }} />
-
-						<Autocomplete
-							value={selectedChannel}
-							onChange={(_, value) => handleChange(value)}
-							disablePortal
-							options={channels}
-							getOptionLabel={(option) => option.name || ""}
-							sx={{ width: 300 }}
-							renderInput={(params) => <TextField {...params} label="Canal" />}
-						/>
-					</Box>
+					<SimpleAutocompleteDropdown
+						options={channels}
+						onChange={handleChange}
+						value={selectedChannel}
+						label="Canal"
+						icon={<LiveTvIcon fontSize="large" sx={{ mr: 1 }} />}
+					/>
 
 					<div style={{ marginBottom: 0, marginTop: "auto" }}>
 						<ExecuteButton onClick={handleQuery} disabled={!selectedChannel} />
 					</div>
 				</div>
 
-				<Table
-					page={currentPage}
-					onPageChange={handlePageChange}
-					rows={queryResults[currentPage]}
-					columns={columns}
-				/>
+				{isLoadingQuery ? (
+					<div
+						style={{
+							height: "100%",
+							width: "100%",
+							display: "flex",
+							alignItems: "center",
+							justifyContent: "center",
+						}}
+					>
+						<CircularProgress />
+					</div>
+				) : isQueryExecuted ? (
+					<Table
+						page={currentPage}
+						onPageChange={handlePageChange}
+						rows={queryResults[currentPage]}
+						columns={columns}
+						pageSize={PAGE_SIZE}
+						rowCount={links.last?.page * PAGE_SIZE}
+					/>
+				) : (
+					<div style={{ height: "100%", width: "100%" }}></div>
+				)}
 			</div>
 		</QueryPage>
 	);
