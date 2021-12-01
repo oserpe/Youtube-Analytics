@@ -78,6 +78,17 @@ async function channelNames(req, res, next) {
 	}
 }
 
+async function politicians(req, res, next) {
+	try {
+		const politicians = await mongodbService.getPoliticians();
+		res.json(politicians);
+	}
+	catch (error) {
+		console.error("politicians: " + error);
+		next(error);
+	}
+}
+
 async function searchMentions(req, res, next) {
 	try {
 		const mentionsCount = await elasticSearchService.getSearchMentions(req.params.query, req.query.from);
@@ -116,6 +127,7 @@ module.exports = {
 	politicianTimePerChannel,
 	politiciansPairsMentions,
 	channelNames,
+	politicians,
 	searchMentions,
 	politiciansLikenessPerChannel,
 	mentionsEvolution

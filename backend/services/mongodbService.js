@@ -51,6 +51,12 @@ async function getChannelNames() {
 	return await db.collection("channels").find({}, { projection: { _id: 0, name: 1 } }).toArray();
 }
 
+async function getPoliticians(){
+	const db = mongodb.getDB();
+
+	return await db.collection("politicians").find({}, { projection: { _id: 0, fullname: 1 } }).toArray();
+}
+
 async function getPoliticiansLikenessPerChannel(videosId) {
 	const db = mongodb.getDB();
 
@@ -77,5 +83,6 @@ module.exports = {
 	getChannelsById,
 	getChannelsIdsByName,
 	getChannelNames,
+	getPoliticians,
 	getPoliticiansLikenessPerChannel
 }
