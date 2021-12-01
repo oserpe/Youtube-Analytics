@@ -10,9 +10,11 @@ async function load() {
 	const elasticClient = elasticDB.getDB();
 
 	try {
-
 		let count = 0;
-		const politicians = await mongoClient.collection("politicians").find().toArray();
+		const politicians = await mongoClient
+			.collection("politicians")
+			.find()
+			.toArray();
 
 		for (const politician of politicians) {
 			// usamos elasticsearch para encontrar todos los videos relacionados a un politico
@@ -45,7 +47,9 @@ async function load() {
 									MERGE (p)-[:mentioned_by {video_id: "${video._source.video_id}"}]->(c)`);
 			}
 
-			console.log(++count + " of " + politicians.length + ' politicians loaded');
+			console.log(
+				++count + " of " + politicians.length + " politicians loaded"
+			);
 		}
 	} finally {
 		await neo4j.closeSession(session);

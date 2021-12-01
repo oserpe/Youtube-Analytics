@@ -9,7 +9,7 @@ async function getVideosByPolitician(politicianFullname) {
 		`MATCH (p:Politician {fullname: "${politicianFullname}"})-[r]->(c:Channel)
         RETURN r.video_id`
 	);
-	return videosIdsRecords.records.map(record => record.get(0));
+	return videosIdsRecords.records.map((record) => record.get(0));
 }
 
 function getPoliticianPairsMentionsQuery(channelName) {
@@ -29,7 +29,7 @@ async function getPoliticiansPairsMentionsMaxPage(channelName) {
 
 	const result = await session.run(
 		getPoliticianPairsMentionsQuery(channelName) +
-		` RETURN COUNT(r1) AS totalMentions`
+			` RETURN COUNT(r1) AS totalMentions`
 	);
 	return Math.ceil(result.records[0].get(0).toNumber() / CHANNEL_PAGE_SIZE);
 }
@@ -47,21 +47,22 @@ async function getPoliticiansPairsMentions(channelName, page) {
 
 	const pairs = await session.run(
 		getPoliticianPairsMentionsQuery(channelName) +
-		` RETURN p1.fullname, p2.fullname, count(r1) AS mentions, collect(r1.video_id) AS video_ids
+			` RETURN p1.fullname, p2.fullname, count(r1) AS mentions, collect(r1.video_id) AS video_ids
 		ORDER BY mentions DESC, p1.fullname, p2.fullname
 		SKIP ${skip} LIMIT ${limit}`
 	);
-	return pairs.records.map(record => {
+	return pairs.records.map((record) => {
 		return {
 			firstPolitician: record.get(0),
 			secondPolitician: record.get(1),
-			mentions: record.get(2).toNumber()
-		}
+			mentions: record.get(2).toNumber(),
+			videos: record.get(3),
+		};
 	});
 }
 
 module.exports = {
 	getVideosByPolitician,
 	getPoliticiansPairsMentions,
-	getPoliticiansPairsMentionsMaxPage
-}
+	getPoliticiansPairsMentionsMaxPage,
+};

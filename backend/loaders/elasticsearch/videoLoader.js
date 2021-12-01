@@ -7,7 +7,7 @@ async function load() {
 
 	try {
 		await elasticClient.indices.delete({
-			index: "videos"
+			index: "videos",
 		});
 	} catch (err) {
 		// El indice no existia anteriormente, no hay que hacer nada
@@ -22,7 +22,11 @@ async function load() {
 						analyzer: {
 							my_analyzer: {
 								tokenizer: "standard",
-								filter: ["lowercase", "asciifolding", "default_spanish_stopwords", "default_spanish_stemmer"],
+								filter: [
+									"lowercase",
+									"asciifolding",
+									"default_spanish_stopwords",
+								],
 							},
 						},
 						filter: {
@@ -30,11 +34,7 @@ async function load() {
 								type: "stop",
 								stopwords: ["_spanish_"],
 							},
-							default_spanish_stemmer: {
-								type: "stemmer",
-								name: "spanish",
-							}
-						}
+						},
 					},
 				},
 				mappings: {
@@ -85,7 +85,7 @@ async function load() {
 				}
 
 				if (count % Math.floor(videos.length / 100) === 0) {
-					console.log(Math.floor(count / videos.length * 100) + '% loaded');
+					console.log(Math.floor((count / videos.length) * 100) + "% loaded");
 				}
 				count++;
 			}

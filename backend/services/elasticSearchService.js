@@ -17,33 +17,36 @@ async function getSearchMentions(query, from) {
 	const { body } = await elasticClient.search({
 		index: "videos",
 		body: {
+			explain: true,
 			size: 0,
 			query: {
 				bool: {
-					must: [{
-						query_string: {
-							fields: ["title", "description"],
-							query: query,
-							default_operator: "AND",
-						}
-					},
-					{
-						range: {
-							published_at: {
-								gte: from,
-							}
-						}
-					}]
-				}
+					must: [
+						{
+							query_string: {
+								fields: ["title", "description"],
+								query: query,
+								default_operator: "AND",
+							},
+						},
+						{
+							range: {
+								published_at: {
+									gte: from,
+								},
+							},
+						},
+					],
+				},
 			},
 			//ORDENADO PERO NO PAGINADO
 			aggs: {
 				results: {
 					terms: {
 						field: "channel_id",
-						size: ELASTIC_SEARCH_SIZE
-					}
-				}
+						size: ELASTIC_SEARCH_SIZE,
+					},
+				},
 			},
 
 			//PAGINADO PERO NO ORDENADO
@@ -64,16 +67,15 @@ async function getSearchMentions(query, from) {
 			// 		}
 			// 	},
 			// }
-		}
+		},
 	});
 	return body.aggregations.results.buckets;
 }
+
 async function getMentionsEvolution(query, channelsId) {
 	const elasticClient = elasticDB.getDB();
-	const channelsQueryString = channelsId
-		.map((id) => `(${id})`)
-		.join(" OR ");
-	from = new Date().setDate(new Date().getDate() - 14);
+	const channelsQueryString = channelsId.map((id) => `(${id})`).join(" OR ");
+	const from = new Date().setDate(new Date().getDate() - 14);
 
 	const { body } = await elasticClient.search({
 		index: "videos",
@@ -83,21 +85,21 @@ async function getMentionsEvolution(query, channelsId) {
 				bool: {
 					must: [
 						{
-						query_string: {
-							fields: ["title", "description"],
-							query: query,
-							default_operator: "AND",
-						}
-					},
-					{
-						query_string: {
-							fields: ["channel_id"],
-							query: channelsQueryString,
-							default_operator: "AND",
-						}
-					}
-				]
-				}
+							query_string: {
+								fields: ["title", "description"],
+								query: query,
+								default_operator: "AND",
+							},
+						},
+						{
+							query_string: {
+								fields: ["channel_id"],
+								query: channelsQueryString,
+								default_operator: "AND",
+							},
+						},
+					],
+				},
 			},
 			aggs: {
 				filterByDate: {
@@ -105,32 +107,32 @@ async function getMentionsEvolution(query, channelsId) {
 						range: {
 							published_at: {
 								gte: from,
-							}
-						}
+							},
+						},
 					},
 					aggs: {
 						dateStats: {
 							date_histogram: {
-								field: 'published_at',
-								interval: 'day',
+								field: "published_at",
+								interval: "day",
 								extended_bounds: {
 									min: from,
-									max: new Date()
-								}
-							}
-						}
-					}
-				}
+									max: new Date(),
+								},
+							},
+						},
+					},
+				},
 			},
-		}
+		},
 	});
 
-	return body.aggregations.filterByDate.dateStats.buckets
-		.map((bucket) => { return { date: bucket.key_as_string, count: bucket.doc_count } }
-		);
+	return body.aggregations.filterByDate.dateStats.buckets.map((bucket) => {
+		return { date: bucket.key_as_string, count: bucket.doc_count };
+	});
 }
 
 module.exports = {
 	getSearchMentions,
-	getMentionsEvolution
-}
+	getMentionsEvolution,
+};
