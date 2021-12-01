@@ -6,6 +6,14 @@ async function load() {
 	const elasticClient = elasticDB.getDB();
 
 	try {
+		await elasticClient.indices.delete({
+			index: "videos",
+		});
+	} catch (err) {
+		// El indice no existia anteriormente, no hay que hacer nada
+	}
+
+	try {
 		await elasticClient.indices.create({
 			index: "videos",
 			body: {
@@ -14,7 +22,11 @@ async function load() {
 						analyzer: {
 							my_analyzer: {
 								tokenizer: "standard",
-								filter: ["lowercase", "asciifolding", "default_spanish_stopwords", "default_spanish_stemmer"],
+								filter: [
+									"lowercase",
+									"asciifolding",
+									"default_spanish_stopwords",
+								],
 							},
 						},
 						filter: {
@@ -22,17 +34,13 @@ async function load() {
 								type: "stop",
 								stopwords: ["_spanish_"],
 							},
-							default_spanish_stemmer: {
-								type: "stemmer",
-								name: "spanish",
-							}
-						}
+						},
 					},
 				},
 				mappings: {
 					video: {
 						properties: {
-							video_id: { type: "text" },
+							video_id: { type: "keyword" },
 							title: {
 								type: "text",
 								analyzer: "my_analyzer",
@@ -41,10 +49,9 @@ async function load() {
 								type: "text",
 								analyzer: "my_analyzer",
 							},
-							channel_id: { type: "text" },
+							channel_id: { type: "keyword" },
 							published_at: {
 								type: "date",
-								format: "YYYY-MM-DD'T'HH:mm:ssZ",
 							},
 						},
 					},
@@ -78,7 +85,7 @@ async function load() {
 				}
 
 				if (count % Math.floor(videos.length / 100) === 0) {
-					console.log(Math.floor(count / videos.length * 100) + '% loaded');
+					console.log(Math.floor((count / videos.length) * 100) + "% loaded");
 				}
 				count++;
 			}
@@ -89,18 +96,6 @@ async function load() {
 	await elasticClient.indices.refresh({ index: "videos" });
 
 	console.log("ElasticSearch: Finished creating video index");
-
-	// Let's search!
-	//   const { body } = await elasticClient.search({
-	//     index: "videos",
-	//     body: {
-	//       query: {
-	//         match: { title: "CFK" },
-	//       },
-	//     },
-	//   });
-
-	//   console.log(body.hits.hits);
 }
 
 module.exports = load;

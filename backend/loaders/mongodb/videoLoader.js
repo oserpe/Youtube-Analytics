@@ -112,10 +112,10 @@ async function uploadVideosToDB(items) {
 			const statisticsResponse = response.items[0].statistics;
 
 			const statistics = {
-				likes: statisticsResponse.likeCount,
-				dislikes: statisticsResponse.dislikeCount,
-				views: statisticsResponse.viewCount,
-				comment_count: statisticsResponse.commentCount,
+				likes: parseInt(statisticsResponse.likeCount),
+				dislikes: parseInt(statisticsResponse.dislikeCount),
+				views: parseInt(statisticsResponse.viewCount),
+				comment_count: parseInt(statisticsResponse.commentCount),
 			};
 
 			response = await retryFetch(

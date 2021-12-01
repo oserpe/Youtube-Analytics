@@ -4,15 +4,12 @@ require("dotenv").config();
 
 // MONGODB
 const mongoDB = require("./databases/mongo");
-const mongoDBLoader = require("./loaders/mongodb");
 
 // NEO4J
 const neo4j = require("./databases/neo4j");
-const neo4jLoader = require("./loaders/neo4j");
 
 // ELASTICSEARCH
 const elasticsearch = require("./databases/elasticsearch");
-const elasticsearchLoader = require("./loaders/elasticsearch");
 
 const app = express();
 
@@ -20,7 +17,8 @@ const app = express();
 
 app.use(bodyParser.json());
 
-require("./routes/testRoutes")(app);
+// require("./routes/testRoutes")(app);
+require("./routes/queriesRoutes")(app);
 
 // este es el endpoint "/..." (donde cae todo lo que no matchee)
 app.use((req, res, next) => {
@@ -60,6 +58,10 @@ app.listen(port, () => {
 // } else {
 // 	mongoDB.connect(() => {});
 // }
+
+mongoDB.connect(() => { })
+	.then(() => elasticsearch.connect(() => { }))
+	.then(() => neo4j.connect(() => { }));
 
 process.on("SIGINT", function () {
 	// some other closing procedures go here
