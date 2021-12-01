@@ -20,6 +20,7 @@ import ExecuteButton from "../components/ExecuteButton";
 import routes from "../routes";
 import QueryPage from "./QueryPage";
 import ChannelsContext from "../context/ChannelsContext";
+import globalStyles from "../styles";
 
 const ROUTE_INDEX = 3;
 
@@ -32,35 +33,23 @@ const data = [
 	{ date: "06/21", C5N: 100, TN: 500 },
 ];
 
-const useStyles = makeStyles((theme) => ({
-	contentContainer: {
-		display: "flex",
-		flexDirection: "column",
-		justifyContent: "center",
-		margin: "3rem auto",
-		height: 675,
-		width: "80%",
-	},
-	actionsContainer: {
-		display: "flex",
-		justifyContent: "space-between",
-		marginBottom: "1rem",
-	},
-}));
+const useStyles = makeStyles((theme) => ({}));
+const useGlobalStyles = makeStyles(globalStyles);
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
 const WordEvolutionQuery = () => {
 	const classes = useStyles();
+	const globalClasses = useGlobalStyles();
 	const { channels, isLoading } = useContext(ChannelsContext);
 
 	const { title, description } = routes[ROUTE_INDEX];
 
 	return (
 		<QueryPage title={title} description={description}>
-			<div className={classes.contentContainer}>
-				<div className={classes.actionsContainer}>
+			<div className={globalClasses.contentContainer}>
+				<div className={globalClasses.actionsContainer}>
 					{/* channel selector */}
 					<Box sx={{ display: "flex", alignItems: "center" }}>
 						<LiveTvIcon fontSize="large" sx={{ mr: 1 }} />

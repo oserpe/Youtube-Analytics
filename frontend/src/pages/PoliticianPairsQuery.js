@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Autocomplete, Box, CircularProgress, TextField } from "@mui/material";
+import { CircularProgress } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import ExecuteButton from "../components/ExecuteButton";
 import LiveTvIcon from "@mui/icons-material/LiveTv";
@@ -11,6 +11,7 @@ import ChannelsContext from "../context/ChannelsContext";
 import FullscreenCircularLoader from "../components/FullscreenCircularLoader";
 import { usePairsQuery } from "../hooks";
 import SimpleAutocompleteDropdown from "../components/SimpleAutocompleteDropdown";
+import globalStyles from "../styles";
 
 const ROUTE_INDEX = 0;
 const PAGE_SIZE = 8;
@@ -33,24 +34,12 @@ const columns = [
 	},
 ];
 
-const useStyles = makeStyles((theme) => ({
-	contentContainer: {
-		display: "flex",
-		flexDirection: "column",
-		justifyContent: "center",
-		margin: "3rem auto",
-		height: 675,
-		width: "80%",
-	},
-	actionsContainer: {
-		display: "flex",
-		justifyContent: "space-between",
-		marginBottom: "1rem",
-	},
-}));
+const useStyles = makeStyles((theme) => ({}));
+const useGlobalStyles = makeStyles(globalStyles);
 
 const PoliticianPairsQuery = () => {
 	const classes = useStyles();
+	const globalClasses = useGlobalStyles();
 	const { channels, isLoadingChannels } = useContext(ChannelsContext);
 	const [queryResults, setQueryResults] = useState({});
 	const [currentPage, setCurrentPage] = useState(0);
@@ -92,8 +81,8 @@ const PoliticianPairsQuery = () => {
 		<FullscreenCircularLoader />
 	) : (
 		<QueryPage title={title} description={description}>
-			<div className={classes.contentContainer}>
-				<div className={classes.actionsContainer}>
+			<div className={globalClasses.contentContainer}>
+				<div className={globalClasses.actionsContainer}>
 					<SimpleAutocompleteDropdown
 						options={channels}
 						onChange={handleChange}

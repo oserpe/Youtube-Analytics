@@ -4,8 +4,7 @@ import QueryHeader from "../components/QueryHeader";
 
 const useStyles = makeStyles((theme) => ({
 	headerContainer: {
-		marginTop: "4rem",
-		marginLeft: "4rem",
+		margin: "4rem 4rem 0 4rem",
 	},
 }));
 
