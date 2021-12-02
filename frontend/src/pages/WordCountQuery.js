@@ -55,13 +55,14 @@ const WordCountQuery = () => {
 				queryDate
 			);
 
+			setQueryResults(results);
+
 			if (results.length > 0) {
 				setIsQueryEmpty(false);
 			} else {
 				setIsQueryEmpty(true);
 			}
 
-			setQueryResults(results);
 			setIsLoadingQuery(false);
 		} catch (error) {
 			console.error(error);
