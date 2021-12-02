@@ -115,7 +115,7 @@ async function mentionsEvolution(req, res, next) {
 		const channelsName = req?.query?.channels;
 		const channelsMap = await mongodbService.getChannelsIdsByName(channelsName);
 		const mentionsEvolution =
-			await elasticSearchService.getMentionsEvolution(req.params.query, Object.values(channelsMap));
+			await elasticSearchService.getMentionsEvolution(req.params.query, Object.values(channelsMap), req.query.from, req.query.to);
 		res.json(mentionsEvolution);
 	} catch (error) {
 		console.error("mentionsEvolution: " + error);
