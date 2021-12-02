@@ -2,6 +2,7 @@ import LikeDislikeQuery from "./pages/LikeDislikeQuery";
 import PoliticianPairsQuery from "./pages/PoliticianPairsQuery";
 import PoliticianTimePerChannelQuery from "./pages/PoliticianTimePerChannelQuery";
 import QueryPage from "./pages/QueryPage";
+import WordCountQuery from "./pages/WordCountQuery";
 import WordEvolutionQuery from "./pages/WordEvolutionQuery";
 
 const queries = [
@@ -24,7 +25,7 @@ const queries = [
 		description:
 			"Cillum commodo esse commodo est aliqua dolor nostrud fugiat. Esse esse cupidatat ipsum amet.",
 		path: "/query3",
-		component: QueryPage,
+		component: WordCountQuery,
 	},
 	{
 		title: "Evolución de menciones de una palabra en un período para un canal",

@@ -1,7 +1,7 @@
 import ytAnalyticsApi from "../apis/ytAnalyticsApi";
 
 const useLikeDislikeQueryHook = () => {
-	const getLikeDislikeQueryResults = async (politician, page) => {
+	const getLikeDislikeQueryResults = async (politician) => {
 		const encodedPolitician = encodeURIComponent(politician.fullname);
 
 		const response = await ytAnalyticsApi.get(
