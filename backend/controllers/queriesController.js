@@ -17,7 +17,7 @@ async function politicianTimePerChannel(req, res, next) {
 			const channelName = channelsNameMap[channelData._id];
 			return {
 				...channelData,
-				channelName
+				channel_name: channelName
 			}
 		});
 
