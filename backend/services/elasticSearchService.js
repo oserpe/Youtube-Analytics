@@ -98,38 +98,135 @@ async function getMentionsEvolution(query, channelsId) {
 								default_operator: "AND",
 							},
 						},
+						{
+							range: {
+								published_at: {
+									gte: from,
+								},
+							},
+						}
 					],
 				},
 			},
 			aggs: {
-				filterByDate: {
-					filter: {
-						range: {
-							published_at: {
-								gte: from,
-							},
-						},
+				channels: {
+					terms: {
+						field: "channel_id",
 					},
 					aggs: {
-						dateStats: {
+						dates_mentions: {
 							date_histogram: {
 								field: "published_at",
-								interval: "day",
+								interval: "1d",
 								extended_bounds: {
 									min: from,
 									max: new Date(),
 								},
-							},
-						},
+							}
+						}
 					},
+					// sales_over_time: {
+					// 	date_histogram: {
+					// 		field: "published_at",
+					// 		interval: "1d",
+					// 		extended_bounds: {
+					// 			min: from,
+					// 			max: new Date(),
+					// 		},
+					// 	}
+					// }
+					// aggs: {
+					// 	resellers: {
+					// 		nested: {
+					// 			path: "channel_id"
+					// 		},
+					// 		aggs: {
+					// 			sales_over_time: {
+					// 				date_histogram: {
+					// 					field: "published_at",
+					// 					interval: "1d",
+					// 					extended_bounds: {
+					// 						min: from,
+					// 						max: new Date(),
+					// 					},
+					// 				}
+					// 			}
+					// 		}
+					// 	}
+					// }
+					// aggs: {
+					// 	channels: {
+					// 		terms: {
+					// 			field: "channel_id",
+					// 		},
+					// 		aggs: {
+					// 			name: { terms: { field: "published_at" } },
+					// 		}
+					// 	},
+					// 	sales_over_time: {
+					// 		date_histogram: {
+					// 			field: "published_at",
+					// 			interval: "1d",
+					// 			extended_bounds: {
+					// 				min: from,
+					// 				max: new Date(),
+					// 			},
+					// 		}
+					// 	}
+					// }
+					// aggs: {
+					// 	filterByDate: {
+					// 		filter: {
+					// 			range: {
+					// 				published_at: {
+					// 					gte: from,
+					// 				},
+					// 			},
+					// 		},
+					// 		aggs: {
+					// 			dateStats: {
+					// 				date_histogram: {
+					// 					field: "published_at",
+					// 					interval: "day",
+					// 					extended_bounds: {
+					// 						min: from,
+					// 						max: new Date(),
+					// 					},
+					// 				},
+					// 			},
+					// 		},
+					// 	},
+					// },
 				},
-			},
-		},
+			}
+		}
 	});
 
-	return body.aggregations.filterByDate.dateStats.buckets.map((bucket) => {
-		return { date: bucket.key_as_string, count: bucket.doc_count };
-	});
+	console.log(body.aggregations.channels.buckets)
+	const result = body.aggregations.channels.buckets.map(channel => {
+		console.log(channel.key)
+		const channelMentionsData = {
+			id: channel.key,
+			date_histogram: []
+		};
+		channel.dates_mentions.buckets.forEach(dateMentions => {
+			channelMentionsData.date_histogram.push({
+				date: dateMentions.key_as_string,
+				mentions: dateMentions.doc_count
+			});
+		});
+
+		return channelMentionsData;
+	})
+
+
+
+	// console.log(body.aggregations.channels.buckets)
+	// body.aggregations.channels.buckets.forEach(c => {
+	// 	console.log("CHANNEL:" + c.key, c.name.buckets)
+	// })
+
+	return result;
 }
 
 module.exports = {

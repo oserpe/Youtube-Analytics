@@ -114,9 +114,16 @@ async function mentionsEvolution(req, res, next) {
 	try {
 		const channelsName = req?.query?.channels;
 		const channelsMap = await mongodbService.getChannelsIdsByName(channelsName);
-		const mentionsEvolution =
+		const channelsIdsMentionsEvolution =
 			await elasticSearchService.getMentionsEvolution(req.params.query, Object.values(channelsMap));
-		res.json(mentionsEvolution);
+		const channelsIdsMap = await mongodbService.getChannelsById(channelsIdsMentionsEvolution.map(channelIdMention => channelIdMention.id));
+		const channelsMentionsEvolution = channelsIdsMentionsEvolution.map(channelIdMention => {
+			return {
+				channel_name: channelsIdsMap[channelIdMention.id],
+				date_histogram: channelIdMention.date_histogram
+			};
+		});
+		res.json(channelsMentionsEvolution);
 	} catch (error) {
 		console.error("mentionsEvolution: " + error);
 		next(error);
