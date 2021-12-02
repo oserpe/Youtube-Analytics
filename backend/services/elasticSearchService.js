@@ -1,17 +1,32 @@
 const elasticDB = require("../databases/elasticsearch");
 const ELASTIC_SEARCH_SIZE = 10000;
 
-async function getSearchMentions(query, from) {
-	const elasticClient = elasticDB.getDB();
-
-	if (from) {
-		const dateParts = from.split("/");
+function getDateFromStringOrDefault(dateParam, defaultDate, isFrom) {
+	if (dateParam) {
+		const dateParts = dateParam.split("/");
 		// month is 0-based, that's why we need dataParts[1] - 1
-		from = new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0]);
-		if (from > new Date())
-			throw new Error("ElasticSearch Service: From must be a date in the past");
+		const dateParsed = new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0]);
+		if (isFrom) {
+			if (dateParsed > new Date())
+				throw new Error("ElasticSearch Service: From must be a date in the past");
+		} else {
+			if (dateParsed > new Date())
+				throw new Error("ElasticSearch Service: To must be a date in the past or today");
+		}
+
+		return dateParsed;
 	} else {
-		from = new Date().setDate(new Date().getDate() - 7);
+		return defaultDate;
+	}
+}
+
+async function getSearchMentions(query, from, to) {
+	const elasticClient = elasticDB.getDB();
+	from = getDateFromStringOrDefault(from, new Date().setDate(new Date().getDate() - 14), true);
+	to = getDateFromStringOrDefault(to, new Date().setDate(new Date().getDate()), false);
+
+	if (to < from) {
+		throw new Error("ElasticSearch Service: To must be after From");
 	}
 
 	const { body } = await elasticClient.search({
@@ -33,6 +48,7 @@ async function getSearchMentions(query, from) {
 							range: {
 								published_at: {
 									gte: from,
+									lte: to
 								},
 							},
 						},
@@ -72,10 +88,15 @@ async function getSearchMentions(query, from) {
 	return body.aggregations.results.buckets;
 }
 
-async function getMentionsEvolution(query, channelsId) {
+async function getMentionsEvolution(query, channelsId, from, to) {
 	const elasticClient = elasticDB.getDB();
 	const channelsQueryString = channelsId.map((id) => `(${id})`).join(" OR ");
-	const from = new Date().setDate(new Date().getDate() - 14);
+	from = getDateFromStringOrDefault(from, new Date().setDate(new Date().getDate() - 14), true);
+	to = getDateFromStringOrDefault(to, new Date().setDate(new Date().getDate()), false);
+
+	if (to < from) {
+		throw new Error("ElasticSearch Service: To must be after From");
+	}
 
 	const { body } = await elasticClient.search({
 		index: "videos",
@@ -102,6 +123,7 @@ async function getMentionsEvolution(query, channelsId) {
 							range: {
 								published_at: {
 									gte: from,
+									lte: to
 								},
 							},
 						}
@@ -120,91 +142,18 @@ async function getMentionsEvolution(query, channelsId) {
 								interval: "1d",
 								extended_bounds: {
 									min: from,
-									max: new Date(),
+									max: to,
 								},
+								min_doc_count: 0
 							}
 						}
 					},
-					// sales_over_time: {
-					// 	date_histogram: {
-					// 		field: "published_at",
-					// 		interval: "1d",
-					// 		extended_bounds: {
-					// 			min: from,
-					// 			max: new Date(),
-					// 		},
-					// 	}
-					// }
-					// aggs: {
-					// 	resellers: {
-					// 		nested: {
-					// 			path: "channel_id"
-					// 		},
-					// 		aggs: {
-					// 			sales_over_time: {
-					// 				date_histogram: {
-					// 					field: "published_at",
-					// 					interval: "1d",
-					// 					extended_bounds: {
-					// 						min: from,
-					// 						max: new Date(),
-					// 					},
-					// 				}
-					// 			}
-					// 		}
-					// 	}
-					// }
-					// aggs: {
-					// 	channels: {
-					// 		terms: {
-					// 			field: "channel_id",
-					// 		},
-					// 		aggs: {
-					// 			name: { terms: { field: "published_at" } },
-					// 		}
-					// 	},
-					// 	sales_over_time: {
-					// 		date_histogram: {
-					// 			field: "published_at",
-					// 			interval: "1d",
-					// 			extended_bounds: {
-					// 				min: from,
-					// 				max: new Date(),
-					// 			},
-					// 		}
-					// 	}
-					// }
-					// aggs: {
-					// 	filterByDate: {
-					// 		filter: {
-					// 			range: {
-					// 				published_at: {
-					// 					gte: from,
-					// 				},
-					// 			},
-					// 		},
-					// 		aggs: {
-					// 			dateStats: {
-					// 				date_histogram: {
-					// 					field: "published_at",
-					// 					interval: "day",
-					// 					extended_bounds: {
-					// 						min: from,
-					// 						max: new Date(),
-					// 					},
-					// 				},
-					// 			},
-					// 		},
-					// 	},
-					// },
 				},
 			}
 		}
 	});
-
-	console.log(body.aggregations.channels.buckets)
+	console.log(body.aggregations)
 	const result = body.aggregations.channels.buckets.map(channel => {
-		console.log(channel.key)
 		const channelMentionsData = {
 			id: channel.key,
 			date_histogram: []
@@ -218,13 +167,6 @@ async function getMentionsEvolution(query, channelsId) {
 
 		return channelMentionsData;
 	})
-
-
-
-	// console.log(body.aggregations.channels.buckets)
-	// body.aggregations.channels.buckets.forEach(c => {
-	// 	console.log("CHANNEL:" + c.key, c.name.buckets)
-	// })
 
 	return result;
 }

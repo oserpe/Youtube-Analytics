@@ -91,7 +91,7 @@ async function politicians(req, res, next) {
 
 async function searchMentions(req, res, next) {
 	try {
-		const mentionsCount = await elasticSearchService.getSearchMentions(req.params.query, req.query.from);
+		const mentionsCount = await elasticSearchService.getSearchMentions(req.params.query, req.query.from, req.query.to);
 		const channelsNameMap = await mongodbService
 			.getChannelsById(mentionsCount.map(channel => channel.key));
 
@@ -115,7 +115,7 @@ async function mentionsEvolution(req, res, next) {
 		const channelsName = req?.query?.channels;
 		const channelsMap = await mongodbService.getChannelsIdsByName(channelsName);
 		const channelsIdsMentionsEvolution =
-			await elasticSearchService.getMentionsEvolution(req.params.query, Object.values(channelsMap));
+			await elasticSearchService.getMentionsEvolution(req.params.query, Object.values(channelsMap), req.query.from, req.query.to);
 		const channelsIdsMap = await mongodbService.getChannelsById(channelsIdsMentionsEvolution.map(channelIdMention => channelIdMention.id));
 		const channelsMentionsEvolution = channelsIdsMentionsEvolution.map(channelIdMention => {
 			return {

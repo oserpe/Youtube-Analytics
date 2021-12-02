@@ -53,10 +53,11 @@ async function getPoliticiansPairsMentions(channelName, page) {
 		ORDER BY mentions DESC, p1.fullname, p2.fullname
 		SKIP ${skip} LIMIT ${limit}`
 	);
+	
 	return pairs.records.map((record) => {
 		return {
-			first_politician: record.get(0),
-			second_politician: record.get(1),
+			first_politician_name: record.get(0),
+			second_politician_name: record.get(1),
 			mentions: record.get(2).toNumber(),
 			videos: record.get(3),
 		};

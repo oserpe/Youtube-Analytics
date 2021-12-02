@@ -44,7 +44,7 @@ async function load() {
 
 			for (const video of body.hits.hits) {
 				await session.run(`MATCH (p:Politician {fullname: "${politician.fullname}"}), (c:Channel {channel_id: "${video._source.channel_id}"})
-									MERGE (p)-[:mentioned_by {video_id: "${video._source.video_id}"}]->(c)`);
+									MERGE (p)-[:mentioned_by]->(v:Video {video_id: "${video._source.video_id}"})-[:published_in]->(c)`);
 			}
 
 			console.log(

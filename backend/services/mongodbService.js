@@ -48,13 +48,13 @@ async function getChannelsIdsByName(channelsName) {
 async function getChannelNames() {
 	const db = mongodb.getDB();
 
-	return await db.collection("channels").find({}, { projection: { _id: 0, name: 1 } }).toArray();
+	return await db.collection("channels").find({}, { projection: { _id: 0, channel_name: '$name' } }).toArray();
 }
 
 async function getPoliticians(){
 	const db = mongodb.getDB();
 
-	return await db.collection("politicians").find({}, { projection: { _id: 0, fullname: 1 } }).toArray();
+	return await db.collection("politicians").find({}, { projection: { _id: 0, politician_name: '$fullname' } }).toArray();
 }
 
 async function getPoliticiansLikenessPerChannel(videosId) {
