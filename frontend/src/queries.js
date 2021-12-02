@@ -1,3 +1,4 @@
+import LikeDislikeQuery from "./pages/LikeDislikeQuery";
 import PoliticianPairsQuery from "./pages/PoliticianPairsQuery";
 import PoliticianTimePerChannelQuery from "./pages/PoliticianTimePerChannelQuery";
 import QueryPage from "./pages/QueryPage";
@@ -33,11 +34,11 @@ const queries = [
 		component: WordEvolutionQuery,
 	},
 	{
-		title: "Recepción de video ante la mención de un político",
+		title: "Recepción de videos en canales ante la mención de un político",
 		description:
 			"Cupidatat duis esse officia enim adipisicing amet. Tempor adipisicing magna ad elit voluptate eiusmod.",
 		path: "/query5",
-		component: QueryPage,
+		component: LikeDislikeQuery,
 	},
 ];
 

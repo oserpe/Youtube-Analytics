@@ -14,12 +14,7 @@ const usePoliticianTimeQueryHook = () => {
 		const encodedPolitician = encodeURIComponent(politician.fullname);
 
 		const response = await ytAnalyticsApi.get(
-			`/politician-time-per-channel/${encodedPolitician}`,
-			{
-				params: {
-					page: page + 1,
-				},
-			}
+			`/politician-time-per-channel/${encodedPolitician}`
 		);
 
 		return response.data.map((row) => ({
