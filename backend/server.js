@@ -39,26 +39,6 @@ app.listen(port, () => {
 	console.log(`SERVER LISTENING ON PORT ${port}`);
 });
 
-
-// FIXME: CONNECT TO ALL DATABASES WITHOUT LOADERS!
-
-// if (process.env.NODE_ENV == "load") {
-// 	mongoDB.connect(mongoDBLoader);
-// 	// .then(() => elasticsearch.connect(elasticsearchLoader))
-// 	// .then(() => neo4j.connect(neo4jLoader));
-// } else if (process.env.NODE_ENV == "load-neo") {
-// 	mongoDB
-// 		.connect(() => {})
-// 		.then(() => elasticsearch.connect(() => {}))
-// 		.then(() => neo4j.connect(neo4jLoader));
-// } else if (process.env.NODE_ENV == "load-elastic") {
-// 	mongoDB
-// 		.connect(() => {})
-// 		.then(() => elasticsearch.connect(elasticsearchLoader));
-// } else {
-// 	mongoDB.connect(() => {});
-// }
-
 mongoDB.connect(() => { })
 	.then(() => elasticsearch.connect(() => { }))
 	.then(() => neo4j.connect(() => { }));
