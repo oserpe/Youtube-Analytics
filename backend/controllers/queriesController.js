@@ -42,7 +42,7 @@ async function politiciansLikenessPerChannel(req, res, next) {
 			const channelName = channelsNameMap[channelData._id];
 			return {
 				...channelData,
-				channelName
+				channel_name: channelName
 			}
 		});
 		res.json(politiciansLikenessPerChannelResponse);
@@ -99,7 +99,7 @@ async function searchMentions(req, res, next) {
 			const channelName = channelsNameMap[channelData.key];
 			return {
 				mentions: channelData.doc_count,
-				channelName
+				channel_name: channelName
 			}
 		});
 
