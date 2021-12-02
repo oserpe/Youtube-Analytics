@@ -14,7 +14,7 @@ export const PoliticiansContextProvider = ({ children }) => {
 			setPoliticians(response.data);
 			setIsLoadingPoliticians(false);
 		} catch (error) {
-			console.log(error);
+			console.error(error);
 		}
 	};
 

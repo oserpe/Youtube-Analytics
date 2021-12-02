@@ -3,7 +3,7 @@ import PoliticianTimePerChannelQuery from "./pages/PoliticianTimePerChannelQuery
 import QueryPage from "./pages/QueryPage";
 import WordEvolutionQuery from "./pages/WordEvolutionQuery";
 
-const routes = [
+const queries = [
 	{
 		title: "Pares de políticos por canal",
 		description:
@@ -41,4 +41,4 @@ const routes = [
 	},
 ];
 
-export default routes;
+export default queries;

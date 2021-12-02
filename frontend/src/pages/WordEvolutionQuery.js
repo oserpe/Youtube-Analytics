@@ -17,12 +17,12 @@ import {
 } from "recharts";
 
 import ExecuteButton from "../components/ExecuteButton";
-import routes from "../routes";
+import queries from "../queries";
 import QueryPage from "./QueryPage";
 import ChannelsContext from "../context/ChannelsContext";
 import globalStyles from "../styles";
 
-const ROUTE_INDEX = 3;
+const QUERY_INDEX = 3;
 
 const data = [
 	{ date: "01/21", C5N: 2400, TN: 400 },
@@ -44,7 +44,7 @@ const WordEvolutionQuery = () => {
 	const globalClasses = useGlobalStyles();
 	const { channels, isLoading } = useContext(ChannelsContext);
 
-	const { title, description } = routes[ROUTE_INDEX];
+	const { title, description } = queries[QUERY_INDEX];
 
 	return (
 		<QueryPage title={title} description={description}>

@@ -14,7 +14,7 @@ export const ChannelsContextProvider = ({ children }) => {
 			setChannels(response.data);
 			setIsLoadingChannels(false);
 		} catch (error) {
-			console.log(error);
+			console.error(error);
 		}
 	};
 

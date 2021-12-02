@@ -2,7 +2,8 @@ import { makeStyles } from "@mui/styles";
 import React from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
 import { ChannelsContextProvider } from "../context/ChannelsContext";
-import routes from "../routes";
+import { PoliticiansContextProvider } from "../context/PoliticiansContext";
+import queries from "../queries";
 import { themeUtils } from "../theme";
 
 import "./App.css";
@@ -23,21 +24,23 @@ const App = () => {
 
 	return (
 		<div>
-			<Sidebar routes={routes} />
+			<Sidebar routes={queries} />
 			<div className={classes.pageContainer}>
 				<ChannelsContextProvider>
-					<Switch>
-						<Redirect from="/" to={Object.values(routes)[0].path} exact />
+					<PoliticiansContextProvider>
+						<Switch>
+							<Redirect from="/" to={Object.values(queries)[0].path} exact />
 
-						{routes.map((route) => (
-							<Route
-								exact
-								path={route.path}
-								key={route.path}
-								component={route.component}
-							/>
-						))}
-					</Switch>
+							{queries.map((route) => (
+								<Route
+									exact
+									path={route.path}
+									key={route.path}
+									component={route.component}
+								/>
+							))}
+						</Switch>
+					</PoliticiansContextProvider>
 				</ChannelsContextProvider>
 				<Footer />
 			</div>

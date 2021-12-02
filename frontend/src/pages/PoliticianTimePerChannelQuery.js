@@ -1,21 +1,105 @@
 import { makeStyles } from "@mui/styles";
-import React from "react";
-import routes from "../routes";
+import React, { useContext, useState } from "react";
+import PersonIcon from "@mui/icons-material/Person";
+
+import SimpleAutocompleteDropdown from "../components/SimpleAutocompleteDropdown";
+import PoliticiansContext from "../context/PoliticiansContext";
+import queries from "../queries";
 import globalStyles from "../styles";
 import QueryPage from "./QueryPage";
+import ExecuteButton from "../components/ExecuteButton";
+import { usePoliticianTimeQuery } from "../hooks";
+import FullscreenCircularLoader from "../components/FullscreenCircularLoader";
+import Table from "../components/Table";
+import { CircularProgress } from "@mui/material";
 
-const ROUTE_INDEX = 1;
+const QUERY_INDEX = 1;
+
+const columns = [
+	{
+		field: "channel",
+		headerName: "Canal",
+		flex: 1,
+		headerAlign: "left",
+		align: "left",
+	},
+	{
+		field: "totalTime",
+		headerName: "Tiempo total",
+		flex: 1,
+		headerAlign: "left",
+		align: "left",
+	},
+];
 
 const useGlobalStyles = makeStyles(globalStyles);
 
 const PoliticianTimePerChannelQuery = () => {
 	const globalClasses = useGlobalStyles();
-	const { title, description } = routes[ROUTE_INDEX];
+	const { title, description } = queries[QUERY_INDEX];
 
-	return (
+	const { politicians, isLoadingPoliticians } = useContext(PoliticiansContext);
+	const [selectedPolitician, setSelectedPolitician] = React.useState("");
+	const { getPoliticianTimeQueryResults } = usePoliticianTimeQuery();
+	const [isLoadingQuery, setIsLoadingQuery] = useState(false);
+	const [queryResults, setQueryResults] = useState([]);
+
+	const isQueryExecuted = queryResults.length > 0;
+
+	const handlePoliticianChange = (value) => {
+		setSelectedPolitician(value);
+	};
+
+	const handleQuery = async () => {
+		try {
+			setIsLoadingQuery(true);
+			const results = await getPoliticianTimeQueryResults(selectedPolitician);
+			setQueryResults(results);
+			setIsLoadingQuery(false);
+		} catch (error) {
+			console.error(error);
+		}
+	};
+
+	return isLoadingPoliticians ? (
+		<FullscreenCircularLoader />
+	) : (
 		<QueryPage title={title} description={description}>
-			<div className={globalClasses.actionsContainer}>
-                {/* <SimpleAutocompleteDropdown /> */}
+			<div className={globalClasses.contentContainer}>
+				<div className={globalClasses.actionsContainer}>
+					<SimpleAutocompleteDropdown
+						options={politicians}
+						onChange={handlePoliticianChange}
+						value={selectedPolitician}
+						label="Político"
+						icon={<PersonIcon fontSize="large" sx={{ mr: 1 }} />}
+						getOptionLabel={(option) => option.fullname || ""}
+					/>
+					<ExecuteButton disabled={!selectedPolitician} onClick={handleQuery} />
+				</div>
+
+				{isLoadingQuery ? (
+					<div
+						style={{
+							height: "100%",
+							width: "100%",
+							display: "flex",
+							alignItems: "center",
+							justifyContent: "center",
+						}}
+					>
+						<CircularProgress />
+					</div>
+				) : isQueryExecuted ? (
+					<Table
+						rows={queryResults}
+						columns={columns}
+						pageSize={queryResults.length}
+					/>
+				) : (
+					<div style={{ height: "100%", width: "100%" }}></div>
+				)}
+			</div>
 		</QueryPage>
 	);
 };

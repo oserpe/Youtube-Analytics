@@ -4,7 +4,7 @@ const globalStyles = (theme) => ({
 		flexDirection: "column",
 		justifyContent: "center",
 		margin: "3rem auto",
-		height: 675,
+		height: 500,
 		width: "80%",
 	},
 	actionsContainer: {

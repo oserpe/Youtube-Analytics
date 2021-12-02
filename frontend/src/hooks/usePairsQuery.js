@@ -43,8 +43,8 @@ const usePairsQueryHook = () => {
 		setLinks(parseLinkHeader(response.headers.link) || initialLinks);
 
 		return response.data.map((p) => ({
-			id: p.firstPolitician + " - " + p.secondPolitician,
-			pair: p.firstPolitician + " - " + p.secondPolitician,
+			id: p.first_politician + " - " + p.second_politician,
+			pair: p.first_politician + " - " + p.second_politician,
 			mentions: p.mentions,
 		}));
 	};

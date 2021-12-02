@@ -5,9 +5,9 @@ const Table = ({
 	columns,
 	rows = [],
 	pageSize = 5,
-	onPageChange,
-	rowCount = 100,
-	page,
+	onPageChange = () => {},
+	rowCount = pageSize,
+	page = 0,
 	paginationMode = "server",
 	isLoading = false,
 }) => {

@@ -10,7 +10,6 @@ const useStyles = makeStyles((theme) => ({
 
 const QueryPage = ({ title, description, children }) => {
 	const classes = useStyles();
-
 	return (
 		<div>
 			<div className={classes.headerContainer}>

@@ -4,7 +4,7 @@ import { makeStyles } from "@mui/styles";
 import ExecuteButton from "../components/ExecuteButton";
 import LiveTvIcon from "@mui/icons-material/LiveTv";
 
-import routes from "../routes";
+import queries from "../queries";
 import QueryPage from "./QueryPage";
 import Table from "../components/Table";
 import ChannelsContext from "../context/ChannelsContext";
@@ -13,7 +13,7 @@ import { usePairsQuery } from "../hooks";
 import SimpleAutocompleteDropdown from "../components/SimpleAutocompleteDropdown";
 import globalStyles from "../styles";
 
-const ROUTE_INDEX = 0;
+const QUERY_INDEX = 0;
 const PAGE_SIZE = 8;
 
 const columns = [
@@ -47,7 +47,7 @@ const PoliticianPairsQuery = () => {
 	const [selectedChannel, setSelectedChannel] = useState("");
 	const { links, getPairsQueryResults } = usePairsQuery();
 
-	const { title, description } = routes[ROUTE_INDEX];
+	const { title, description } = queries[QUERY_INDEX];
 	const isQueryExecuted = Object.keys(queryResults).length > 0;
 
 	useEffect(() => {
@@ -65,7 +65,7 @@ const PoliticianPairsQuery = () => {
 
 			setIsLoadingQuery(false);
 		} catch (error) {
-			console.log(error);
+			console.error(error);
 		}
 	};
 
@@ -89,6 +89,7 @@ const PoliticianPairsQuery = () => {
 						value={selectedChannel}
 						label="Canal"
 						icon={<LiveTvIcon fontSize="large" sx={{ mr: 1 }} />}
+						getOptionLabel={(option) => option.name || ""}
 					/>
 
 					<div style={{ marginBottom: 0, marginTop: "auto" }}>
