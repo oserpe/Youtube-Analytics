@@ -12,7 +12,7 @@ const formatTime = (ms) => {
 const usePoliticianTimeQueryHook = () => {
 	const getPoliticianTimeQueryResults = async (politician) => {
 		try {
-			const encodedPolitician = encodeURIComponent(politician.fullname);
+			const encodedPolitician = encodeURIComponent(politician.politicianName);
 
 			const response = await ytAnalyticsApi.get(
 				`/politician-time-per-channel/${encodedPolitician}`

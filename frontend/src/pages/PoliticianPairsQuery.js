@@ -85,7 +85,10 @@ const PoliticianPairsQuery = () => {
 						value={selectedChannel}
 						label="Canal"
 						icon={<LiveTvIcon fontSize="large" sx={{ mr: 1 }} />}
-						getOptionLabel={(option) => option.channelName || ""}
+						getOptionLabel={(option) => {
+							console.log(option);
+							return option.channelName || "";
+						}}
 					/>
 
 					<div style={{ marginBottom: 0, marginTop: "auto" }}>

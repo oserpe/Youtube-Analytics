@@ -30,7 +30,7 @@ const usePairsQueryHook = () => {
 
 	const getPairsQueryResults = async (channel, page) => {
 		try {
-			const encodedChannel = encodeURIComponent(channel.name);
+			const encodedChannel = encodeURIComponent(channel.channelName);
 
 			const response = await ytAnalyticsApi.get(
 				`/politician-pairs-mentions/${encodedChannel}`,
@@ -44,8 +44,8 @@ const usePairsQueryHook = () => {
 			setLinks(parseLinkHeader(response.headers.link) || initialLinks);
 
 			return response.data.map((p) => ({
-				id: p.first_politician + " - " + p.second_politician,
-				pair: p.first_politician + " - " + p.second_politician,
+				id: p.first_politician_name + " - " + p.second_politician_name,
+				pair: p.first_politician_name + " - " + p.second_politician_name,
 				mentions: p.mentions,
 			}));
 		} catch (error) {

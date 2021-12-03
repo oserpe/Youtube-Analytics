@@ -89,10 +89,6 @@ const WordEvolutionQuery = () => {
 		));
 	};
 
-	useEffect(() => {
-		console.log(queryResults);
-	}, [queryResults]);
-
 	const handleQuery = async () => {
 		setIsLoadingQuery(true);
 
