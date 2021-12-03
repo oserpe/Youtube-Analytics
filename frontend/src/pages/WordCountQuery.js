@@ -48,25 +48,18 @@ const WordCountQuery = () => {
 	const isQueryExecuted = queryResults.length > 0 || isQueryEmpty;
 
 	const handleQuery = async () => {
-		try {
-			setIsLoadingQuery(true);
-			const results = await getWordCountQueryResults(
-				queryWord.trim(),
-				queryDate
-			);
+		setIsLoadingQuery(true);
+		const results = await getWordCountQueryResults(queryWord.trim(), queryDate);
 
-			setQueryResults(results);
+		setQueryResults(results);
 
-			if (results.length > 0) {
-				setIsQueryEmpty(false);
-			} else {
-				setIsQueryEmpty(true);
-			}
-
-			setIsLoadingQuery(false);
-		} catch (error) {
-			console.error(error);
+		if (results.length > 0) {
+			setIsQueryEmpty(false);
+		} else {
+			setIsQueryEmpty(true);
 		}
+
+		setIsLoadingQuery(false);
 	};
 
 	const handleWordChange = (value) => {

@@ -51,14 +51,10 @@ const PoliticianTimePerChannelQuery = () => {
 	};
 
 	const handleQuery = async () => {
-		try {
-			setIsLoadingQuery(true);
-			const results = await getPoliticianTimeQueryResults(selectedPolitician);
-			setQueryResults(results);
-			setIsLoadingQuery(false);
-		} catch (error) {
-			console.error(error);
-		}
+		setIsLoadingQuery(true);
+		const results = await getPoliticianTimeQueryResults(selectedPolitician);
+		setQueryResults(results);
+		setIsLoadingQuery(false);
 	};
 
 	return isLoadingPoliticians ? (
@@ -73,7 +69,7 @@ const PoliticianTimePerChannelQuery = () => {
 						value={selectedPolitician}
 						label="Político"
 						icon={<PersonIcon fontSize="large" sx={{ mr: 1 }} />}
-						getOptionLabel={(option) => option.fullname || ""}
+						getOptionLabel={(option) => option.politicianName || ""}
 					/>
 					<ExecuteButton disabled={!selectedPolitician} onClick={handleQuery} />
 				</div>

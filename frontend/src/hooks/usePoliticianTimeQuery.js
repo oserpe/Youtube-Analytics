@@ -11,17 +11,21 @@ const formatTime = (ms) => {
 
 const usePoliticianTimeQueryHook = () => {
 	const getPoliticianTimeQueryResults = async (politician) => {
-		const encodedPolitician = encodeURIComponent(politician.fullname);
+		try {
+			const encodedPolitician = encodeURIComponent(politician.fullname);
 
-		const response = await ytAnalyticsApi.get(
-			`/politician-time-per-channel/${encodedPolitician}`
-		);
+			const response = await ytAnalyticsApi.get(
+				`/politician-time-per-channel/${encodedPolitician}`
+			);
 
-		return response.data.map((row) => ({
-			id: row._id,
-			channel: row.channel_name,
-			totalTime: formatTime(row.total_time),
-		}));
+			return response.data.map((row) => ({
+				id: row._id,
+				channel: row.channel_name,
+				totalTime: formatTime(row.total_time),
+			}));
+		} catch (error) {
+			console.error(error);
+		}
 	};
 
 	return {

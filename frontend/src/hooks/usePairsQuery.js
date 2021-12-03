@@ -29,24 +29,28 @@ const usePairsQueryHook = () => {
 	const [links, setLinks] = useState({ ...initialLinks });
 
 	const getPairsQueryResults = async (channel, page) => {
-		const encodedChannel = encodeURIComponent(channel.name);
+		try {
+			const encodedChannel = encodeURIComponent(channel.name);
 
-		const response = await ytAnalyticsApi.get(
-			`/politician-pairs-mentions/${encodedChannel}`,
-			{
-				params: {
-					page: page + 1,
-				},
-			}
-		);
+			const response = await ytAnalyticsApi.get(
+				`/politician-pairs-mentions/${encodedChannel}`,
+				{
+					params: {
+						page: page + 1,
+					},
+				}
+			);
 
-		setLinks(parseLinkHeader(response.headers.link) || initialLinks);
+			setLinks(parseLinkHeader(response.headers.link) || initialLinks);
 
-		return response.data.map((p) => ({
-			id: p.first_politician + " - " + p.second_politician,
-			pair: p.first_politician + " - " + p.second_politician,
-			mentions: p.mentions,
-		}));
+			return response.data.map((p) => ({
+				id: p.first_politician + " - " + p.second_politician,
+				pair: p.first_politician + " - " + p.second_politician,
+				mentions: p.mentions,
+			}));
+		} catch (error) {
+			console.error(error);
+		}
 	};
 
 	return {

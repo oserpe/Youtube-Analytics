@@ -1,7 +1,6 @@
 import LikeDislikeQuery from "./pages/LikeDislikeQuery";
 import PoliticianPairsQuery from "./pages/PoliticianPairsQuery";
 import PoliticianTimePerChannelQuery from "./pages/PoliticianTimePerChannelQuery";
-import QueryPage from "./pages/QueryPage";
 import WordCountQuery from "./pages/WordCountQuery";
 import WordEvolutionQuery from "./pages/WordEvolutionQuery";
 

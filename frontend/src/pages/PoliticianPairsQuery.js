@@ -57,16 +57,12 @@ const PoliticianPairsQuery = () => {
 	}, [currentPage]);
 
 	const handleQuery = async () => {
-		try {
-			setIsLoadingQuery(true);
+		setIsLoadingQuery(true);
 
-			const results = await getPairsQueryResults(selectedChannel, currentPage);
-			setQueryResults({ ...queryResults, [currentPage]: results });
+		const results = await getPairsQueryResults(selectedChannel, currentPage);
+		setQueryResults({ ...queryResults, [currentPage]: results });
 
-			setIsLoadingQuery(false);
-		} catch (error) {
-			console.error(error);
-		}
+		setIsLoadingQuery(false);
 	};
 
 	const handleChange = (value) => {
@@ -89,7 +85,7 @@ const PoliticianPairsQuery = () => {
 						value={selectedChannel}
 						label="Canal"
 						icon={<LiveTvIcon fontSize="large" sx={{ mr: 1 }} />}
-						getOptionLabel={(option) => option.name || ""}
+						getOptionLabel={(option) => option.channelName || ""}
 					/>
 
 					<div style={{ marginBottom: 0, marginTop: "auto" }}>

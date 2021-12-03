@@ -11,7 +11,12 @@ export const PoliticiansContextProvider = ({ children }) => {
 		try {
 			const response = await ytAnalyticsApi.get("/politicians");
 
-			setPoliticians(response.data);
+			// Change to camelCase
+			const data = response.data.map((channel) => ({
+				politicianName: channel.politicianName,
+			}));
+
+			setPoliticians(data);
 			setIsLoadingPoliticians(false);
 		} catch (error) {
 			console.error(error);

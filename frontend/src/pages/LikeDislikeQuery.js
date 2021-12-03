@@ -68,14 +68,12 @@ const LikeDislikeQuery = () => {
 	};
 
 	const handleQuery = async () => {
-		try {
-			setIsLoadingQuery(true);
-			const results = await getLikeDislikeQueryResults(selectedPolitician);
-			setQueryResults(results);
-			setIsLoadingQuery(false);
-		} catch (error) {
-			console.error(error);
-		}
+		setIsLoadingQuery(true);
+
+		const results = await getLikeDislikeQueryResults(selectedPolitician);
+
+		setQueryResults(results);
+		setIsLoadingQuery(false);
 	};
 
 	return isLoadingPoliticians ? (
@@ -90,7 +88,7 @@ const LikeDislikeQuery = () => {
 						value={selectedPolitician}
 						label="Político"
 						icon={<PersonIcon fontSize="large" sx={{ mr: 1 }} />}
-						getOptionLabel={(option) => option.fullname || ""}
+						getOptionLabel={(option) => option.politicianName || ""}
 					/>
 					<ExecuteButton disabled={!selectedPolitician} onClick={handleQuery} />
 				</div>

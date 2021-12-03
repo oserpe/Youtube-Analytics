@@ -11,7 +11,12 @@ export const ChannelsContextProvider = ({ children }) => {
 		try {
 			const response = await ytAnalyticsApi.get("/channel-names");
 
-			setChannels(response.data);
+			// Change to camelCase
+			const data = response.data.map((channel) => ({
+				channelName: channel.channel_name,
+			}));
+
+			setChannels(data);
 			setIsLoadingChannels(false);
 		} catch (error) {
 			console.error(error);
