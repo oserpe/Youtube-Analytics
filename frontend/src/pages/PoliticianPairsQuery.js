@@ -34,11 +34,9 @@ const columns = [
 	},
 ];
 
-const useStyles = makeStyles((theme) => ({}));
 const useGlobalStyles = makeStyles(globalStyles);
 
 const PoliticianPairsQuery = () => {
-	const classes = useStyles();
 	const globalClasses = useGlobalStyles();
 	const { channels, isLoadingChannels } = useContext(ChannelsContext);
 	const [queryResults, setQueryResults] = useState({});
@@ -85,10 +83,7 @@ const PoliticianPairsQuery = () => {
 						value={selectedChannel}
 						label="Canal"
 						icon={<LiveTvIcon fontSize="large" sx={{ mr: 1 }} />}
-						getOptionLabel={(option) => {
-							console.log(option);
-							return option.channelName || "";
-						}}
+						getOptionLabel={(option) => option.channelName || ""}
 					/>
 
 					<div style={{ marginBottom: 0, marginTop: "auto" }}>

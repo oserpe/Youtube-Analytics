@@ -1,6 +1,6 @@
 import { Autocomplete, Box, Checkbox, TextField } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import LiveTvIcon from "@mui/icons-material/LiveTv";
@@ -48,19 +48,16 @@ const LINE_COLORS = [
 	"#00c4ff",
 ];
 
-const useStyles = makeStyles((theme) => ({}));
 const useGlobalStyles = makeStyles(globalStyles);
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
 const WordEvolutionQuery = () => {
-	const classes = useStyles();
 	const globalClasses = useGlobalStyles();
 	const { channels, isLoadingChannels } = useContext(ChannelsContext);
 	const { getWordEvolutionQueryResults } = useWordEvolutionQuery();
 	const [queryResults, setQueryResults] = React.useState(null);
-	const [isLoadingQuery, setIsLoadingQuery] = React.useState(false);
 	const [selectedChannels, setSelectedChannels] = React.useState([]);
 	const [from, setFrom] = React.useState(null);
 	const [to, setTo] = React.useState(new Date());
@@ -90,8 +87,6 @@ const WordEvolutionQuery = () => {
 	};
 
 	const handleQuery = async () => {
-		setIsLoadingQuery(true);
-
 		const results = await getWordEvolutionQueryResults(
 			queryWord.trim(),
 			from,
@@ -100,7 +95,6 @@ const WordEvolutionQuery = () => {
 		);
 
 		setQueryResults(results);
-		setIsLoadingQuery(false);
 	};
 
 	const handleWordChange = (value) => {
