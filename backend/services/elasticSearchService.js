@@ -152,7 +152,7 @@ async function getMentionsEvolution(query, channelsId, from, to) {
 			}
 		}
 	});
-	console.log(body.aggregations)
+
 	const result = body.aggregations.channels.buckets.map(channel => {
 		const channelMentionsData = {
 			id: channel.key,
@@ -168,7 +168,24 @@ async function getMentionsEvolution(query, channelsId, from, to) {
 		return channelMentionsData;
 	})
 
-	return result;
+	const missingChannels = channelsId
+		.filter(id => !result.map(channel => channel.id).includes(id))
+		.map(id => {
+			const channelMentionsData = {
+				id: id,
+				date_histogram: []
+			};
+
+			for (let index = new Date(from.getTime()); index < to; index.setDate(index.getDate() + 1)) {
+				channelMentionsData.date_histogram.push({
+					date: index.toISOString(),
+					mentions: 0
+				});
+			}
+			return channelMentionsData;
+		});
+
+	return [...result, ...missingChannels];
 }
 
 module.exports = {
