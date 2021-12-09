@@ -4,14 +4,19 @@ const globalStyles = (theme) => ({
 		flexDirection: "column",
 		justifyContent: "center",
 		margin: "3rem auto",
-		height: 500,
 		width: "90%",
 	},
 	actionsContainer: {
 		display: "flex",
-		justifyContent: "space-between",
-		alignItems: "center",
+		justifyContent: "space-evenly",
+		flexWrap: "wrap",
 		marginBottom: "1rem",
+	},
+	chartContainer: {
+		display: "flex",
+		justifyContent: "center",
+		alignItems: "center",
+		overflowX: "scroll",
 	},
 });
 

@@ -133,7 +133,7 @@ const WordEvolutionQuery = () => {
 						</Box>
 
 						{/* channel selector */}
-						<Box sx={{ display: "flex", alignItems: "center" }}>
+						<Box sx={{ display: "flex", alignItems: "center", width: 1 / 3 }}>
 							<LiveTvIcon fontSize="large" sx={{ mr: 1 }} />
 							<Autocomplete
 								multiple
@@ -154,7 +154,7 @@ const WordEvolutionQuery = () => {
 										{option.channelName}
 									</li>
 								)}
-								style={{ width: 300 }}
+								sx={{ width: 1 }}
 								renderInput={(params) => (
 									<TextField {...params} label="Canales" />
 								)}
@@ -183,8 +183,10 @@ const WordEvolutionQuery = () => {
 					</div>
 
 					{queryResults ? (
-						<ResponsiveContainer width="100%" height="100%">
+						<div className={globalClasses.chartContainer}>
 							<LineChart
+								height={500}
+								width={1200}
 								data={queryResults}
 								margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
 							>
@@ -195,7 +197,7 @@ const WordEvolutionQuery = () => {
 								<Legend />
 								{renderLines()}
 							</LineChart>
-						</ResponsiveContainer>
+						</div>
 					) : (
 						<div style={{ height: "100%", width: "100%" }}></div>
 					)}

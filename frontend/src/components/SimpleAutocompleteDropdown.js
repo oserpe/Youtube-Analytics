@@ -10,7 +10,7 @@ const SimpleAutocompleteDropdown = ({
 	getOptionLabel,
 }) => {
 	return (
-		<Box sx={{ display: "flex", alignItems: "center" }}>
+		<Box sx={{ display: "flex", alignItems: "center", width: 1 / 3 }}>
 			{icon}
 
 			<Autocomplete
@@ -18,8 +18,8 @@ const SimpleAutocompleteDropdown = ({
 				onChange={(_, value) => onChange(value)}
 				disablePortal
 				options={options}
+				sx={{ width: 1 }}
 				getOptionLabel={(option) => getOptionLabel(option)}
-				sx={{ width: 300 }}
 				renderInput={(params) => <TextField {...params} label={label} />}
 			/>
 		</Box>

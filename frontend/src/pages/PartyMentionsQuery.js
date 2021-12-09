@@ -96,9 +96,11 @@ const PartyMentionsQuery = () => {
 						<CircularProgress />
 					</div>
 				) : isQueryExecuted ? (
-					<ResponsiveContainer width="100%" height="100%">
+					<div className={globalClasses.chartContainer}>
 						<PieChart>
 							<Pie
+								height={500}
+								width={1000}
 								data={queryResults}
 								dataKey="mentions"
 								nameKey="party"
@@ -118,7 +120,7 @@ const PartyMentionsQuery = () => {
 							<Tooltip />
 							<Legend />
 						</PieChart>
-					</ResponsiveContainer>
+					</div>
 				) : (
 					<div style={{ height: "100%", width: "100%" }}></div>
 				)}
