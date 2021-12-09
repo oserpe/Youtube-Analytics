@@ -10,4 +10,5 @@ module.exports = app => {
     app.get("/mentions/:query", decodeUriParameter.query, queriesController.searchMentions);
     app.get("/politician-likeness-per-channel/:politician", decodeUriParameter.politician, queriesController.politiciansLikenessPerChannel);
     app.get("/mentions-evolution/:query", decodeUriParameter.query, decodeUriQuery.channels, queriesController.mentionsEvolution);
+	app.get("/party-mentions/:channelName", decodeUriParameter.channelName, queriesController.partyMentions);
 }

@@ -130,6 +130,17 @@ async function mentionsEvolution(req, res, next) {
 	}
 }
 
+async function partyMentions(req, res, next) {
+	try {
+		const channelName = req.params.channelName;
+		const partyMentions = await neo4jService.getPartyMentions(channelName);
+		res.json(partyMentions);
+	} catch (error) {
+		console.error("partyMentions: " + error);
+		next(error);
+	}
+}
+
 module.exports = {
 	politicianTimePerChannel,
 	politiciansPairsMentions,
@@ -137,5 +148,6 @@ module.exports = {
 	politicians,
 	searchMentions,
 	politiciansLikenessPerChannel,
-	mentionsEvolution
+	mentionsEvolution,
+	partyMentions
 }

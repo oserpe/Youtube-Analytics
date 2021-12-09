@@ -13,7 +13,9 @@ async function getVideosByPolitician(politicianFullname) {
 }
 
 function getPoliticianPairsMentionsQuery(channelName) {
-	return `MATCH (p1:Politician)-[r1:mentioned_by]->(c:Channel {name: "${channelName}"})<-[r2:mentioned_by {video_id: r1.video_id}]-(p2:Politician)
+	return `MATCH (c:Channel {name: "${channelName}"})
+			WITH c
+			MATCH (p1:Politician)-[r1:mentioned_by]->(c)<-[r2:mentioned_by {video_id: r1.video_id}]-(p2:Politician)
 			WHERE p1.fullname < p2.fullname `;
 	// Forma vieja
 	// `MATCH (p1:Politician)-[r1:mentioned_by]->(c:Channel {name: "${channelName}"})<-[r2:mentioned_by]-(p2:Politician)
@@ -53,7 +55,7 @@ async function getPoliticiansPairsMentions(channelName, page) {
 		ORDER BY mentions DESC, p1.fullname, p2.fullname
 		SKIP ${skip} LIMIT ${limit}`
 	);
-	
+
 	return pairs.records.map((record) => {
 		return {
 			first_politician_name: record.get(0),
@@ -64,8 +66,24 @@ async function getPoliticiansPairsMentions(channelName, page) {
 	});
 }
 
+async function getPartyMentions(channelName) {
+	const session = neo4j.getSession();
+	const response = await session.run(
+		`MATCH (p:Politician)-[r:mentioned_by]->(c:Channel {name: "${channelName}"})
+		RETURN p.party, count(r) AS mentions
+		ORDER BY mentions DESC`);
+	console.log(response);
+	return response.records.map((record) => {
+		return {
+			party: record.get(0),
+			mentions: record.get(1).toNumber(),
+		};
+	});
+}
+
 module.exports = {
 	getVideosByPolitician,
 	getPoliticiansPairsMentions,
 	getPoliticiansPairsMentionsMaxPage,
+	getPartyMentions,
 };
