@@ -176,7 +176,7 @@ async function getMentionsEvolution(query, channelsId, from, to) {
 				date_histogram: []
 			};
 
-			for (let index = new Date(from.getTime()); index < to; index.setDate(index.getDate() + 1)) {
+			for (let index = new Date(from.getTime() - from.getTimezoneOffset() * 60 * 1000); index <= to; index.setDate(index.getDate() + 1)) {
 				channelMentionsData.date_histogram.push({
 					date: index.toISOString(),
 					mentions: 0

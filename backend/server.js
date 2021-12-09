@@ -17,7 +17,6 @@ const app = express();
 
 app.use(bodyParser.json());
 
-// require("./routes/testRoutes")(app);
 require("./routes/queriesRoutes")(app);
 
 // este es el endpoint "/..." (donde cae todo lo que no matchee)
