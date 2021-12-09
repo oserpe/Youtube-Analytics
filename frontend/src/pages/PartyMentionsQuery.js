@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { CircularProgress } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import ExecuteButton from "../components/ExecuteButton";
@@ -6,69 +6,59 @@ import LiveTvIcon from "@mui/icons-material/LiveTv";
 
 import queries from "../queries";
 import QueryPage from "./QueryPage";
-import Table from "../components/Table";
 import ChannelsContext from "../context/ChannelsContext";
 import FullscreenCircularLoader from "../components/FullscreenCircularLoader";
-import { usePairsQuery } from "../hooks";
+import { usePartyMentionsQuery } from "../hooks";
 import SimpleAutocompleteDropdown from "../components/SimpleAutocompleteDropdown";
 import globalStyles from "../styles";
+import { Cell, ResponsiveContainer } from "recharts";
+import { PieChart, Pie, Legend, Tooltip } from "recharts";
 
-const QUERY_INDEX = 5;
-const PAGE_SIZE = 8;
+const QUERY_INDEX = 4;
 
-const columns = [
-	{
-		field: "pair",
-		headerName: "Par",
-		flex: 1,
-		headerAlign: "left",
-		align: "left",
-	},
-	{
-		field: "mentions",
-		headerName: "Veces nombrado",
-		type: "number",
-		flex: 1,
-		headerAlign: "left",
-		align: "left",
-	},
+const PIE_COLORS = [
+	"#8884d8",
+	"#82ca9d",
+	"#ffc658",
+	"#ff8c42",
+	"#b2df8a",
+	"#33a02c",
+	"#fb9a99",
+	"#e31a1c",
+	"#fdbf6f",
+	"#ff7f00",
+	"#cab2d6",
+	"#6a3d9a",
+	"#ffff99",
+	"#b15928",
+	"#a6cee3",
+	"#1f78b4",
+	"#00c4ff",
 ];
-
 const useGlobalStyles = makeStyles(globalStyles);
 
-const PoliticianPairsQuery = () => {
+const PartyMentionsQuery = () => {
 	const globalClasses = useGlobalStyles();
 	const { channels, isLoadingChannels } = useContext(ChannelsContext);
-	const [queryResults, setQueryResults] = useState({});
-	const [currentPage, setCurrentPage] = useState(0);
+	const [queryResults, setQueryResults] = useState(null);
 	const [isLoadingQuery, setIsLoadingQuery] = useState(false);
 	const [selectedChannel, setSelectedChannel] = useState("");
-	const { links, getPairsQueryResults } = usePairsQuery();
+	const { getPartyMentionsQueryResults } = usePartyMentionsQuery();
 
 	const { title, description } = queries[QUERY_INDEX];
-	const isQueryExecuted = Object.keys(queryResults).length > 0;
-
-	useEffect(() => {
-		if (currentPage in queryResults || !isQueryExecuted) return;
-
-		handleQuery();
-	}, [currentPage]);
+	const isQueryExecuted = queryResults !== null;
 
 	const handleQuery = async () => {
 		setIsLoadingQuery(true);
 
-		const results = await getPairsQueryResults(selectedChannel, currentPage);
-		setQueryResults({ ...queryResults, [currentPage]: results });
+		const results = await getPartyMentionsQueryResults(selectedChannel);
+		setQueryResults(results);
 
 		setIsLoadingQuery(false);
 	};
 
 	const handleChange = (value) => {
 		setSelectedChannel(value);
-	};
-
-	const handlePageChange = (number) => {
-		setCurrentPage(number);
 	};
 
 	return isLoadingChannels ? (
@@ -104,14 +94,26 @@ const PoliticianPairsQuery = () => {
 						<CircularProgress />
 					</div>
 				) : isQueryExecuted ? (
-					<Table
-						page={currentPage}
-						onPageChange={handlePageChange}
-						rows={queryResults[currentPage]}
-						columns={columns}
-						pageSize={PAGE_SIZE}
-						rowCount={links.last?.page * PAGE_SIZE}
-					/>
+					<ResponsiveContainer width="100%" height="100%">
+						<PieChart>
+							<Pie
+								data={queryResults}
+								dataKey="mentions"
+								nameKey="party"
+								cx="50%"
+								cy="50%"
+								outerRadius={150}
+								fill="#82ca9d"
+								label
+							>
+								{queryResults.map((entry, index) => (
+									<Cell fill={PIE_COLORS[index % PIE_COLORS.length]} />
+								))}
+							</Pie>
+							<Tooltip />
+							<Legend />
+						</PieChart>
+					</ResponsiveContainer>
 				) : (
 					<div style={{ height: "100%", width: "100%" }}></div>
 				)}
@@ -120,4 +122,4 @@ const PoliticianPairsQuery = () => {
 	);
 };
 
-export default PoliticianPairsQuery;
+export default PartyMentionsQuery;

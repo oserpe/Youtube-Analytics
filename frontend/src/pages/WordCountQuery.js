@@ -12,7 +12,7 @@ import ExecuteButton from "../components/ExecuteButton";
 import { useWordCountQuery } from "../hooks";
 import Table from "../components/Table";
 
-const QUERY_INDEX = 2;
+const QUERY_INDEX = 1;
 
 const columns = [
 	{

@@ -13,7 +13,7 @@ import FullscreenCircularLoader from "../components/FullscreenCircularLoader";
 import Table from "../components/Table";
 import { CircularProgress } from "@mui/material";
 
-const QUERY_INDEX = 1;
+const QUERY_INDEX = 0;
 
 const columns = [
 	{

@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
 const Sidebar = ({ routes }) => {
 	const classes = useStyles();
 	const [currentRoute, setCurrentRoute] = useState(window.location.pathname);
-	// TODO: arreglar este fix nefasto
+
 	const isSelected = (route) =>
 		route.path === currentRoute ||
 		(route.path === "/query1" && currentRoute === "/");

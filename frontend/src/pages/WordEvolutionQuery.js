@@ -26,7 +26,7 @@ import globalStyles from "../styles";
 import FullscreenCircularLoader from "../components/FullscreenCircularLoader";
 import { useWordEvolutionQuery } from "../hooks";
 
-const QUERY_INDEX = 3;
+const QUERY_INDEX = 2;
 
 const LINE_COLORS = [
 	"#8884d8",
@@ -80,7 +80,7 @@ const WordEvolutionQuery = () => {
 			<Line
 				type="monotone"
 				dataKey={channel}
-				stroke={LINE_COLORS[index]}
+				stroke={LINE_COLORS[index % LINE_COLORS.length]}
 				dot={false}
 			/>
 		));
