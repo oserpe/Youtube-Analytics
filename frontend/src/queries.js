@@ -18,7 +18,7 @@ const queries = [
 		title: "Número de menciones de una frase en un período",
 		description:
 			"Ingrese una frase y elija un período de tiempo, y la query obtendrá la cantidad de menciones de la misma para cada canal dentro del lapso de tiempo especificado.",
-		usedDatabases: ["MongoDB", "ElasticSearch"],
+		usedDatabases: ["MongoDB", "Elasticsearch"],
 		path: "/query2",
 		component: WordCountQuery,
 	},
@@ -26,7 +26,7 @@ const queries = [
 		title: "Evolución de menciones de una frase en un período para un canal",
 		description:
 			"Ingrese una frase, uno o más canales y un período de tiempo, y la query obtendrá un gráfico con la evolución de la cantidad de menciones de la frase dentro del lapso de tiempo especificado para cada canal.",
-		usedDatabases: ["MongoDB", "ElasticSearch"],
+		usedDatabases: ["MongoDB", "Elasticsearch"],
 		path: "/query3",
 		component: WordEvolutionQuery,
 	},

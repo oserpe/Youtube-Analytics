@@ -45,7 +45,7 @@ const PoliticianPairsQuery = () => {
 	const [selectedChannel, setSelectedChannel] = useState("");
 	const { links, getPairsQueryResults } = usePairsQuery();
 
-	const { title, description } = queries[QUERY_INDEX];
+	const { title, description, usedDatabases } = queries[QUERY_INDEX];
 	const isQueryExecuted = Object.keys(queryResults).length > 0;
 
 	useEffect(() => {
@@ -74,7 +74,11 @@ const PoliticianPairsQuery = () => {
 	return isLoadingChannels ? (
 		<FullscreenCircularLoader />
 	) : (
-		<QueryPage title={title} description={description}>
+		<QueryPage
+			title={title}
+			description={description}
+			usedDatabases={usedDatabases}
+		>
 			<div className={globalClasses.contentContainer}>
 				<div className={globalClasses.actionsContainer}>
 					<SimpleAutocompleteDropdown
@@ -86,9 +90,7 @@ const PoliticianPairsQuery = () => {
 						getOptionLabel={(option) => option.channelName || ""}
 					/>
 
-					<div style={{ marginBottom: 0, marginTop: "auto" }}>
-						<ExecuteButton onClick={handleQuery} disabled={!selectedChannel} />
-					</div>
+					<ExecuteButton onClick={handleQuery} disabled={!selectedChannel} />
 				</div>
 
 				{isLoadingQuery ? (

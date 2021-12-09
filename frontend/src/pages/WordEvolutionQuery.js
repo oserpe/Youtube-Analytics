@@ -63,7 +63,7 @@ const WordEvolutionQuery = () => {
 	const [to, setTo] = React.useState(new Date());
 	const [queryWord, setQueryWord] = React.useState("");
 
-	const { title, description } = queries[QUERY_INDEX];
+	const { title, description, usedDatabases } = queries[QUERY_INDEX];
 
 	const isDisabled =
 		!queryWord.trim() || !selectedChannels.length || !from || !to;
@@ -78,6 +78,7 @@ const WordEvolutionQuery = () => {
 
 		return channels.map((channel, index) => (
 			<Line
+				key={index}
 				type="monotone"
 				dataKey={channel}
 				stroke={LINE_COLORS[index % LINE_COLORS.length]}
@@ -113,7 +114,11 @@ const WordEvolutionQuery = () => {
 		<FullscreenCircularLoader />
 	) : (
 		<LocalizationProvider dateAdapter={DateAdapter}>
-			<QueryPage title={title} description={description}>
+			<QueryPage
+				title={title}
+				description={description}
+				usedDatabases={usedDatabases}
+			>
 				<div className={globalClasses.contentContainer}>
 					<div className={globalClasses.actionsContainer}>
 						{/* word input */}
@@ -174,9 +179,7 @@ const WordEvolutionQuery = () => {
 							maxDate={new Date()}
 						/>
 
-						<div style={{ marginBottom: 0, marginTop: "auto" }}>
-							<ExecuteButton onClick={handleQuery} disabled={isDisabled} />
-						</div>
+						<ExecuteButton onClick={handleQuery} disabled={isDisabled} />
 					</div>
 
 					{queryResults ? (

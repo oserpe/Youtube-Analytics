@@ -5,11 +5,12 @@ const globalStyles = (theme) => ({
 		justifyContent: "center",
 		margin: "3rem auto",
 		height: 500,
-		width: "80%",
+		width: "90%",
 	},
 	actionsContainer: {
 		display: "flex",
 		justifyContent: "space-between",
+		alignItems: "center",
 		marginBottom: "1rem",
 	},
 });

@@ -36,7 +36,7 @@ const useGlobalStyles = makeStyles(globalStyles);
 
 const WordCountQuery = () => {
 	const globalClasses = useGlobalStyles();
-	const { title, description } = queries[QUERY_INDEX];
+	const { title, description, usedDatabases } = queries[QUERY_INDEX];
 
 	const [queryWord, setQueryWord] = React.useState("");
 	const [queryDate, setQueryDate] = React.useState(null);
@@ -72,7 +72,11 @@ const WordCountQuery = () => {
 
 	return (
 		<LocalizationProvider dateAdapter={DateAdapter}>
-			<QueryPage title={title} description={description}>
+			<QueryPage
+				title={title}
+				description={description}
+				usedDatabases={usedDatabases}
+			>
 				<div className={globalClasses.contentContainer}>
 					<div className={globalClasses.actionsContainer}>
 						<Box sx={{ display: "flex", alignItems: "center" }}>

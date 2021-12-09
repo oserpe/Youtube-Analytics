@@ -45,7 +45,7 @@ const PartyMentionsQuery = () => {
 	const [selectedChannel, setSelectedChannel] = useState("");
 	const { getPartyMentionsQueryResults } = usePartyMentionsQuery();
 
-	const { title, description } = queries[QUERY_INDEX];
+	const { title, description, usedDatabases } = queries[QUERY_INDEX];
 	const isQueryExecuted = queryResults !== null;
 
 	const handleQuery = async () => {
@@ -64,7 +64,11 @@ const PartyMentionsQuery = () => {
 	return isLoadingChannels ? (
 		<FullscreenCircularLoader />
 	) : (
-		<QueryPage title={title} description={description}>
+		<QueryPage
+			title={title}
+			description={description}
+			usedDatabases={usedDatabases}
+		>
 			<div className={globalClasses.contentContainer}>
 				<div className={globalClasses.actionsContainer}>
 					<SimpleAutocompleteDropdown
@@ -76,9 +80,7 @@ const PartyMentionsQuery = () => {
 						getOptionLabel={(option) => option.channelName || ""}
 					/>
 
-					<div style={{ marginBottom: 0, marginTop: "auto" }}>
-						<ExecuteButton onClick={handleQuery} disabled={!selectedChannel} />
-					</div>
+					<ExecuteButton onClick={handleQuery} disabled={!selectedChannel} />
 				</div>
 
 				{isLoadingQuery ? (
@@ -107,7 +109,10 @@ const PartyMentionsQuery = () => {
 								label
 							>
 								{queryResults.map((entry, index) => (
-									<Cell fill={PIE_COLORS[index % PIE_COLORS.length]} />
+									<Cell
+										key={index}
+										fill={PIE_COLORS[index % PIE_COLORS.length]}
+									/>
 								))}
 							</Pie>
 							<Tooltip />

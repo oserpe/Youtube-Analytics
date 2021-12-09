@@ -8,12 +8,17 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-const QueryPage = ({ title, description, children }) => {
+const QueryPage = ({ title, description, usedDatabases, children }) => {
 	const classes = useStyles();
+
 	return (
 		<div>
 			<div className={classes.headerContainer}>
-				<QueryHeader title={title} description={description} />
+				<QueryHeader
+					title={title}
+					description={description}
+					usedDatabases={usedDatabases}
+				/>
 			</div>
 			{children}
 		</div>

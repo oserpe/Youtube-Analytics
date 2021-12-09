@@ -53,7 +53,7 @@ const useGlobalStyles = makeStyles(globalStyles);
 
 const LikeDislikeQuery = () => {
 	const globalClasses = useGlobalStyles();
-	const { title, description } = queries[QUERY_INDEX];
+	const { title, description, usedDatabases } = queries[QUERY_INDEX];
 
 	const { politicians, isLoadingPoliticians } = useContext(PoliticiansContext);
 	const [selectedPolitician, setSelectedPolitician] = React.useState("");
@@ -79,7 +79,11 @@ const LikeDislikeQuery = () => {
 	return isLoadingPoliticians ? (
 		<FullscreenCircularLoader />
 	) : (
-		<QueryPage title={title} description={description}>
+		<QueryPage
+			title={title}
+			description={description}
+			usedDatabases={usedDatabases}
+		>
 			<div className={globalClasses.contentContainer}>
 				<div className={globalClasses.actionsContainer}>
 					<SimpleAutocompleteDropdown
