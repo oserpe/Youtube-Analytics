@@ -95,7 +95,7 @@ Si todo funciona correctamente, deberá cargar la página adecuadamente y cada s
 
 Por defecto, la API correrá en el puerto `5001`. Si se desea modificar esto, habrá que modificar en los archivos `.env` y `.env.development` la propiedad `PORT` dentro del directorio `backend` para que su respectivo valor sea el que se desee. Para que el frontend registre el cambio en puerto, habrá que modificar el archivo `package.json` dentro del directorio `frontend`, modificando la propiedad `proxy` de la siguiente manera:
 
-```json
+```js
 ...
 "proxy": "http://localhost:[PUERTO_NUEVO]",
 ...
