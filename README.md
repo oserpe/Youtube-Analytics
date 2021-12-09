@@ -97,26 +97,38 @@ Para fetchear nuevos videos o inicializar el proyecto con bases de datos vacias,
 $ npm run load
 ```
 
+Si se desea cargar sólo 1 de las bases, ejecutar desde `backend`:
+
+```bash
+$ npm run load-[base]
+```
+
+donde `[base]` puede ser `mongo`, `neo`, o `elastic`.
+
+> ACLARACIÓN: `neo` depende de `elastic` y `elastic` depende de `mongo`, por lo cual si se corrieran en otro orden no se garantiza una ejecución correcta.
+
 ## Queries ofrecidas por la API
 
-Sea `{{path}}` la URL donde se sirve la API (por default es `localhost:5000`).
+Sea `{{baseUrl}}` la URL donde se sirve la API (por default es `localhost:5000`).
+
+Para acceder a la documentación completa de la API, la API expone un servicio de Swagger en `http://{{baseUrl}}/api-docs`
 
 #### 1. Obtener politicos soportados por el proyecto
 
 ```
-http://{{path}}/politicians
+http://{{baseUrl}}/politicians
 ```
 
 #### 2. Obtener canales soportados por el proyecto
 
 ```
-http://{{path}}/channel-names
+http://{{baseUrl}}/channel-names
 ```
 
 #### 3. Obtener tiempo destinado a un politico en cada canal
 
 ```
-http://{{path}}/politician-time-per-channel/:politician?page=:page
+http://{{baseUrl}}/politician-time-per-channel/:politician?page=:page
 ```
 
 Donde `politician` es uno de los politicos soportados por la api y se encuentra URL-encodeado.
@@ -124,7 +136,7 @@ Donde `politician` es uno de los politicos soportados por la api y se encuentra 
 #### 4. Obtener menciones de pares de politicos en un canal
 
 ```
-http://{{path}}/politician-pairs-mentions/:channel_name?page=:page
+http://{{baseUrl}}/politician-pairs-mentions/:channel_name?page=:page
 ```
 
 Donde `channel_name` es uno de los canales soportados por la api y se encuentra URL-encodeado
@@ -132,7 +144,7 @@ Donde `channel_name` es uno de los canales soportados por la api y se encuentra 
 #### 5. Obtener menciones de una query en los videos dentro de un rango de tiempo
 
 ```
-http://{{path}}/mentions/:query?from=:from_date&to=:to_date
+http://{{baseUrl}}/mentions/:query?from=:from_date&to=:to_date
 ```
 
 Donde `query` se encuentra URL-encodeado, `from_date` y `to_date` son fechas del formato `DD/MM/YYYY`.
@@ -140,7 +152,7 @@ Donde `query` se encuentra URL-encodeado, `from_date` y `to_date` son fechas del
 #### 6. Obtener como es recibido un politico en cada canal
 
 ```
-http://{{path}}/politician-likeness-per-channel/:politician?page=:page
+http://{{baseUrl}}/politician-likeness-per-channel/:politician?page=:page
 ```
 
 Donde `politician` es uno de los politicos soportados por la api y se encuentra URL-encodeado.
@@ -148,7 +160,7 @@ Donde `politician` es uno de los politicos soportados por la api y se encuentra 
 #### 7. Obtener como evolucionaron las menciones de una query en cada canal solicitado, dentro de un rango de tiempo en intervalos diarios
 
 ```
-http://{{path}}/mentions-evolution/:query?from=:from_date&to=:to_date&channels=:channel_names
+http://{{baseUrl}}/mentions-evolution/:query?from=:from_date&to=:to_date&channels=:channel_names
 ```
 
 Donde `query` se encuentra URL-encodeado, `from_date` y `to_date` son fechas del formato `DD/MM/YYYY` y `channel_names` es una lista URL-encodeada con los nombres de los canales separados por `,`.
@@ -156,7 +168,7 @@ Donde `query` se encuentra URL-encodeado, `from_date` y `to_date` son fechas del
 #### 8. Obtener las menciones a cada partido politico dentro de los videos de un canal determinado
 
 ```
-http://{{path}}/party-mentions/:channel_name
+http://{{baseUrl}}/party-mentions/:channel_name
 ```
 
 Donde `channel_name` es uno de los canales soportados por la api y se encuentra URL-encodeado
