@@ -51,7 +51,7 @@ async function getChannelNames() {
 	return await db.collection("channels").find({}, { projection: { _id: 0, channel_name: '$name' } }).toArray();
 }
 
-async function getPoliticians(){
+async function getPoliticians() {
 	const db = mongodb.getDB();
 
 	return await db.collection("politicians").find({}, { projection: { _id: 0, politician_name: '$fullname' } }).toArray();
@@ -69,6 +69,8 @@ async function getPoliticiansLikenessPerChannel(videosId) {
 				_id: '$channel_id',
 				likes: { $sum: '$statistics.likes' },
 				dislikes: { $sum: '$statistics.dislikes' },
+				views: { $sum: '$statistics.views' },
+				comment_count: { $sum: '$statistics.comment_count' }
 			}
 		},
 		{
