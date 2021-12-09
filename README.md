@@ -18,6 +18,8 @@
 - [Cómo compilar el proyecto](#cómo-compilar-el-proyecto)
 - [Cómo ejecutar el proyecto](#cómo-ejecutar-el-proyecto)
 - [Descargar y ejecutar imágenes de Docker con datasets](#descargar-y-ejecutar-imagenes-de-docker-con-datasets)
+- [Iniciar servidores de Node y React](#iniciar-servidores-de-node-y-react)
+- [Cómo modificar el puerto de la API](#cómo-modificar-el-puerto-de-la-api)
 - [Carga de datos](#carga-de-datos)
 - [Queries ofrecidas por la API](#queries-ofrecidas-por-la-api)
   - [1. Obtener politicos soportados por el proyecto](#1-obtener-politicos-soportados-por-el-proyecto)
@@ -73,7 +75,9 @@ $ docker run --name elastic -p 9200:9200 -p 9300:9300 -e "discovery.type=single-
 
 > NOTA: para detener los contenedores ejecutar desde la línea de comando: `docker stop [nombre_contenedor]`, y para volver a ejecutarlos correr `docker start [nombre_contenedor]`; donde `[nombre_contenedor]` puede ser `neo`, `mongo` o `elastic`, cada una para la respectiva base de datos utilizada en el proyecto.
 
-Luego, situandose la carpeta `Youtube-Analytics`, para iniciar la API (que correrá en el directorio `http://localhost:5000`) entrar en el directorio `backend` y ejecutar el comando:
+### Iniciar servidores de Node y React
+
+Luego, situandose la carpeta `Youtube-Analytics`, para iniciar la API (que correrá en el directorio `http://localhost:5001`) entrar en el directorio `backend` y ejecutar el comando:
 
 ```bash
 $ npm start
@@ -86,6 +90,16 @@ $ npm start
 ```
 
 Si todo funciona correctamente, deberá cargar la página adecuadamente y cada sección tendrá sus respectivas instrucciones sobre cómo ejecutar las queries desde el frontend.
+
+### Cómo modificar el puerto de la API
+
+Por defecto, la API correrá en el puerto `5001`. Si se desea modificar esto, habrá que modificar en los archivos `.env` y `.env.development` la propiedad `PORT` dentro del directorio `backend` para que su respectivo valor sea el que se desee. Para que el frontend registre el cambio en puerto, habrá que modificar el archivo `package.json` dentro del directorio `frontend`, modificando la propiedad `proxy` de la siguiente manera:
+
+```json
+...
+"proxy": "http://localhost:[PUERTO_NUEVO]",
+...
+```
 
 ## Carga de datos
 
@@ -109,7 +123,7 @@ donde `[base]` puede ser `mongo`, `neo`, o `elastic`.
 
 ## Queries ofrecidas por la API
 
-Sea `{{baseUrl}}` la URL donde se sirve la API (por default es `localhost:5000`).
+Sea `{{baseUrl}}` la URL donde se sirve la API (por default es `localhost:5001`).
 
 Para acceder a la documentación completa de la API, la API expone un servicio de Swagger en `http://{{baseUrl}}/api-docs`
 
