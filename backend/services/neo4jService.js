@@ -72,7 +72,6 @@ async function getPartyMentions(channelName) {
 		`MATCH (p:Politician)-[r:mentioned_by]->(c:Channel {name: "${channelName}"})
 		RETURN p.party, count(r) AS mentions
 		ORDER BY mentions DESC`);
-	console.log(response);
 	return response.records.map((record) => {
 		return {
 			party: record.get(0),
