@@ -81,12 +81,10 @@ async function retryFetch(url) {
 
 		if (!isRequestSuccessful) {
 			console.log(
-				`API key n° ${youtubeApiKeyIndex} with key ${
-					YOUTUBE_API_KEYS[youtubeApiKeyIndex]
-				} reached its request limit. ${
-					youtubeApiKeyIndex + 1 == YOUTUBE_API_KEYS.length
-						? ""
-						: "Switching API key to " + YOUTUBE_API_KEYS[youtubeApiKeyIndex + 1]
+				`API key n° ${youtubeApiKeyIndex} with key ${YOUTUBE_API_KEYS[youtubeApiKeyIndex]
+				} reached its request limit. ${youtubeApiKeyIndex + 1 == YOUTUBE_API_KEYS.length
+					? ""
+					: "Switching API key to " + YOUTUBE_API_KEYS[youtubeApiKeyIndex + 1]
 				}`
 			);
 			youtubeApiKeyIndex++;
@@ -171,17 +169,16 @@ async function load() {
 
 			for (let i = 0; i < MAX_REQUESTS_PER_PLAYLIST; i++) {
 				try {
-					console.log("\tFetching page " + loadingStatus.nextPageToken);
+					console.log("\tFetching page " + loadingStatus.next_page_token);
 
 					const response = await retryFetch(
-						`${process.env.BASE_PATH}/playlistItems?part=snippet&playlistId=${
-							loadingStatus._id
-						}&maxResults=50&pageToken=${loadingStatus.nextPageToken || ""}`
+						`${process.env.BASE_PATH}/playlistItems?part=snippet&playlistId=${loadingStatus._id
+						}&maxResults=50&pageToken=${loadingStatus.next_page_token || ""}`
 					);
 
 					await uploadVideosToDB(response.items);
 
-					loadingStatus.nextPageToken = response.nextPageToken;
+					loadingStatus.next_page_token = response.nextPageToken;
 
 					if (!response.nextPageToken) {
 						break;
@@ -198,7 +195,7 @@ async function load() {
 					});
 				}
 			}
-			if (loadingStatus.nextPageToken) {
+			if (loadingStatus.next_page_token) {
 				db.collection("playlistLoadingStatus").updateOne(
 					{ _id: loadingStatus._id },
 					{ $set: loadingStatus },
