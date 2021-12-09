@@ -24,6 +24,7 @@
     "neo4j-driver": "^4.4.1",
     "node-fetch": "^2.6.6",
     "nodemon": "^2.0.15",
-    "path": "^0.12.7"
+    "path": "^0.12.7",
+    "swagger-ui-express": "^4.2.0"
   }
 }

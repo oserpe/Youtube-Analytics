@@ -16,14 +16,16 @@ function getDateFromStringOrDefault(dateParam, defaultDate, isFrom) {
 
 		return dateParsed;
 	} else {
-		return defaultDate;
+		let aux = new Date();
+		aux.setDate(defaultDate);
+		return aux;
 	}
 }
 
 async function getSearchMentions(query, from, to) {
 	const elasticClient = elasticDB.getDB();
-	from = getDateFromStringOrDefault(from, new Date().setDate(new Date().getDate() - 14), true);
-	to = getDateFromStringOrDefault(to, new Date().setDate(new Date().getDate()), false);
+	from = getDateFromStringOrDefault(from, new Date().getDate() - 14, true);
+	to = getDateFromStringOrDefault(to, new Date().getDate(), false);
 
 	if (to < from) {
 		throw new Error("ElasticSearch Service: To must be after From");
@@ -91,8 +93,9 @@ async function getSearchMentions(query, from, to) {
 async function getMentionsEvolution(query, channelsId, from, to) {
 	const elasticClient = elasticDB.getDB();
 	const channelsQueryString = channelsId.map((id) => `(${id})`).join(" OR ");
-	from = getDateFromStringOrDefault(from, new Date().setDate(new Date().getDate() - 14), true);
-	to = getDateFromStringOrDefault(to, new Date().setDate(new Date().getDate()), false);
+	from = getDateFromStringOrDefault(from, new Date().getDate() - 14, true);
+	console.log(from);
+	to = getDateFromStringOrDefault(to, new Date().getDate(), false);
 
 	if (to < from) {
 		throw new Error("ElasticSearch Service: To must be after From");

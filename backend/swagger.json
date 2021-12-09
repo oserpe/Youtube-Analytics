@@ -1,0 +1,287 @@
+{
+	"swagger": "2.0",
+	"info": {
+	  "version": "1.0",
+	  "title": "backend",
+	  "contact": {}
+	},
+	"host": "localhost:5001",
+	"basePath": "/",
+	"securityDefinitions": {},
+	"schemes": [
+	  "http"
+	],
+	"consumes": [
+	  "application/json"
+	],
+	"produces": [
+	  "application/json"
+	],
+	"paths": {
+	  "/politician-time-per-channel/{politician}": {
+		 "get": {
+			"summary": "politicians time per channel",
+			"tags": [
+			  "Misc"
+			],
+			"operationId": "politicianstimeperchannel",
+			"deprecated": false,
+			"produces": [
+			  "application/json"
+			],
+			"parameters": [
+			  {
+				 "name": "page",
+				 "in": "query",
+				 "type": "integer",
+				 "format": "int32",
+				 "description": ""
+			  },
+			  {
+				 "name": "politician",
+				 "in": "path",
+				 "required": true,
+				 "type": "string",
+				 "description": ""
+			  }
+			],
+			"responses": {
+			  "200": {
+				 "description": "",
+				 "headers": {}
+			  }
+			}
+		 }
+	  },
+	  "/politician-pairs-mentions/{channel_name}": {
+		 "get": {
+			"summary": "politicians pair mention by channel",
+			"tags": [
+			  "Misc"
+			],
+			"operationId": "politicianspairmentionbychannel",
+			"deprecated": false,
+			"produces": [
+			  "application/json"
+			],
+			"parameters": [
+			  {
+				 "name": "page",
+				 "in": "query",
+				 "type": "integer",
+				 "format": "int32",
+				 "description": ""
+			  },
+			  {
+				 "name": "channel_name",
+				 "in": "path",
+				 "required": true,
+				 "type": "string",
+				 "description": ""
+			  }
+			],
+			"responses": {
+			  "200": {
+				 "description": "",
+				 "headers": {}
+			  }
+			}
+		 }
+	  },
+	  "/channel-names": {
+		 "get": {
+			"summary": "channel names",
+			"tags": [
+			  "Misc"
+			],
+			"operationId": "channelnames",
+			"deprecated": false,
+			"produces": [
+			  "application/json"
+			],
+			"parameters": [],
+			"responses": {
+			  "200": {
+				 "description": "",
+				 "headers": {}
+			  }
+			}
+		 }
+	  },
+	  "/politicians": {
+		 "get": {
+			"summary": "politicians",
+			"tags": [
+			  "Misc"
+			],
+			"operationId": "politicians",
+			"deprecated": false,
+			"produces": [
+			  "application/json"
+			],
+			"parameters": [],
+			"responses": {
+			  "200": {
+				 "description": "",
+				 "headers": {}
+			  }
+			}
+		 }
+	  },
+	  "/mentions/{query}": {
+		 "get": {
+			"summary": "mentions",
+			"tags": [
+			  "Misc"
+			],
+			"operationId": "mentions",
+			"deprecated": false,
+			"produces": [
+			  "application/json"
+			],
+			"parameters": [
+			  {
+				 "name": "from",
+				 "in": "query",
+				 "type": "string",
+				 "description": ""
+			  },
+			  {
+				 "name": "to",
+				 "in": "query",
+				 "type": "string",
+				 "description": ""
+			  },
+			  {
+				 "name": "query",
+				 "in": "path",
+				 "required": true,
+				 "type": "string",
+				 "description": ""
+			  }
+			],
+			"responses": {
+			  "200": {
+				 "description": "",
+				 "headers": {}
+			  }
+			}
+		 }
+	  },
+	  "/politician-likeness-per-channel/{politician}": {
+		 "get": {
+			"summary": "politician likeness per channel",
+			"tags": [
+			  "Misc"
+			],
+			"operationId": "politicianlikenessperchannel",
+			"deprecated": false,
+			"produces": [
+			  "application/json"
+			],
+			"parameters": [
+			  {
+				 "name": "page",
+				 "in": "query",
+				 "type": "integer",
+				 "format": "int32",
+				 "description": ""
+			  },
+			  {
+				 "name": "politician",
+				 "in": "path",
+				 "required": true,
+				 "type": "string",
+				 "description": ""
+			  }
+			],
+			"responses": {
+			  "200": {
+				 "description": "",
+				 "headers": {}
+			  }
+			}
+		 }
+	  },
+	  "/mentions-evolution/{query}": {
+		 "get": {
+			"summary": "mentions evolution",
+			"tags": [
+			  "Misc"
+			],
+			"operationId": "mentionsevolution",
+			"deprecated": false,
+			"produces": [
+			  "application/json"
+			],
+			"parameters": [
+			  {
+				 "name": "from",
+				 "in": "query",
+				 "type": "string",
+				 "description": ""
+			  },
+			  {
+				 "name": "to",
+				 "in": "query",
+				 "type": "string",
+				 "description": ""
+			  },
+			  {
+				 "name": "channels",
+				 "in": "query",
+				 "type": "string",
+				 "description": ""
+			  },
+			  {
+				 "name": "query",
+				 "in": "path",
+				 "required": true,
+				 "type": "string",
+				 "description": ""
+			  }
+			],
+			"responses": {
+			  "200": {
+				 "description": "",
+				 "headers": {}
+			  }
+			}
+		 }
+	  },
+	  "/party-mentions/{channel_name}": {
+		 "get": {
+			"summary": "party mentions",
+			"tags": [
+			  "Misc"
+			],
+			"operationId": "partymentions",
+			"deprecated": false,
+			"produces": [
+			  "application/json"
+			],
+			"parameters": [
+			  {
+				 "name": "channel_name",
+				 "in": "path",
+				 "required": true,
+				 "type": "string",
+				 "description": ""
+			  }
+			],
+			"responses": {
+			  "200": {
+				 "description": "",
+				 "headers": {}
+			  }
+			}
+		 }
+	  }
+	},
+	"tags": [
+	  {
+		 "name": "Misc",
+		 "description": ""
+	  }
+	]
+ }
