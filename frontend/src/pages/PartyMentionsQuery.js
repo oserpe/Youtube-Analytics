@@ -97,10 +97,8 @@ const PartyMentionsQuery = () => {
 					</div>
 				) : isQueryExecuted ? (
 					<div className={globalClasses.chartContainer}>
-						<PieChart>
+						<PieChart height={500} width={1000}>
 							<Pie
-								height={500}
-								width={1000}
 								data={queryResults}
 								dataKey="mentions"
 								nameKey="party"

@@ -47,6 +47,22 @@ const columns = [
 		headerAlign: "left",
 		align: "left",
 	},
+	{
+		field: "commentCount",
+		type: "number",
+		headerName: "Comentarios totales",
+		flex: 1,
+		headerAlign: "left",
+		align: "left",
+	},
+	{
+		field: "views",
+		type: "number",
+		headerName: "Vistas totales",
+		flex: 1,
+		headerAlign: "left",
+		align: "left",
+	},
 ];
 
 const useGlobalStyles = makeStyles(globalStyles);

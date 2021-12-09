@@ -18,6 +18,8 @@ const useLikeDislikeQueryHook = () => {
 					row.dislikes === 0
 						? null
 						: (Math.round((row.likes / row.dislikes) * 100) / 100).toFixed(2),
+				commentCount: row.comment_count,
+				views: row.views,
 			}));
 		} catch (error) {
 			console.error(error);
