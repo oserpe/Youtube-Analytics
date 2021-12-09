@@ -39,17 +39,19 @@ const WordCountQuery = () => {
 	const { title, description, usedDatabases } = queries[QUERY_INDEX];
 
 	const [queryWord, setQueryWord] = React.useState("");
-	const [queryDate, setQueryDate] = React.useState(null);
+	const [from, setFrom] = React.useState(null);
+	const [to, setTo] = React.useState(new Date());
 	const { getWordCountQueryResults } = useWordCountQuery();
 	const [isLoadingQuery, setIsLoadingQuery] = useState(false);
 	const [queryResults, setQueryResults] = useState([]);
 	const [isQueryEmpty, setIsQueryEmpty] = useState(false);
 
+	const isDisabled = !queryWord.trim() || !from || !to;
 	const isQueryExecuted = queryResults.length > 0 || isQueryEmpty;
 
 	const handleQuery = async () => {
 		setIsLoadingQuery(true);
-		const results = await getWordCountQueryResults(queryWord.trim(), queryDate);
+		const results = await getWordCountQueryResults(queryWord.trim(), from, to);
 
 		setQueryResults(results);
 
@@ -66,8 +68,12 @@ const WordCountQuery = () => {
 		setQueryWord(value);
 	};
 
-	const handleDateChange = (value) => {
-		setQueryDate(value);
+	const handleFromChange = (value) => {
+		setFrom(value);
+	};
+
+	const handleToChange = (value) => {
+		setTo(value);
 	};
 
 	return (
@@ -92,16 +98,22 @@ const WordCountQuery = () => {
 						<DesktopDatePicker
 							label="Desde"
 							inputFormat="dd/MM/yyyy"
-							value={queryDate}
-							onChange={handleDateChange}
+							value={from}
+							onChange={handleFromChange}
 							renderInput={(params) => <TextField {...params} />}
 							maxDate={new Date()}
 						/>
 
-						<ExecuteButton
-							disabled={!queryWord.trim() || !queryDate}
-							onClick={handleQuery}
+						<DesktopDatePicker
+							label="Hasta"
+							inputFormat="dd/MM/yyyy"
+							value={to}
+							onChange={handleToChange}
+							renderInput={(params) => <TextField {...params} />}
+							maxDate={new Date()}
 						/>
+
+						<ExecuteButton disabled={isDisabled} onClick={handleQuery} />
 					</div>
 
 					{isLoadingQuery ? (
